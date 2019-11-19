@@ -106,19 +106,11 @@ function createMap(data){
 
   let d3Data = createPositionArray(data, cellsCount, squareSize, x.bandwidth(), y.bandwidth());
 
-  let rects = svg.selectAll("#rectGroup")
-  .data(d3Data);
+  let rects = svg.selectAll("rect").data(d3Data, function(d) {return d.state});
 
-  rects.exit().remove();
 
   rects.enter()
-  .append("g")
-  .attr("id", "rectGroup")
-  .attr("x", function(d) { return x(d.x) })
-  .attr("y", function(d) { return y(d.y) })
-    .append('rect')
-      // .attr("x", function(d) { return x(d.x) })
-      // .attr("y", function(d) { return y(d.y) })
+      .append('rect')
       .attr("rx", 4)
       .attr("ry", 4)
       .attr("id", function(d) {return d.id})
@@ -126,26 +118,78 @@ function createMap(data){
       .style("stroke-width", 4)
       .style("stroke", "none")
       .style("opacity", 0.8)
-    .on("mouseover", mouseover)
-    .on("mousemove", mousemove)
-    .on("mouseleave", mouseleave);
+      //.style("text-anchor", "middle")
+      .transition()
+      .duration(600)
+      .attr("x", function(d) { return x(d.x) })
+      .attr("y", function(d) { return y(d.y) });
+
+
+
+  // rects.exit()
+  //   .transition()
+  //   .duration(600)
+  //   .attr("width",  0 )
+  //   .attr("height", 0 );
+
+  rects
+    .exit()
+    .remove();
+
+  d3.select('#dataviz').selectAll('rect')
+       .transition()
+       .duration(600)
+       .attr("width",  x.bandwidth() )
+       .attr("height", y.bandwidth() )
+       .transition()
+       .duration(600)
+       .attr("x", function(d) { return x(d.x) })
+       .attr("y", function(d) { return y(d.y) });
+
+  // d3.select('#dataviz').selectAll('rect')
+  //      .transition()
+  //      .duration(1000)
+  //      .attr("x", function(d) { return x(d.x) })
+  //      .attr("y", function(d) { return y(d.y) })
+
+
+
+
+  // rects.enter()
+  // .append("g")
+  // .attr("id", "rectGroup")
+  // .attr("x", function(d) { return x(d.x) })
+  // .attr("y", function(d) { return y(d.y) })
+  //   .append('rect')
+  //     // .attr("x", function(d) { return x(d.x) })
+  //     // .attr("y", function(d) { return y(d.y) })
+  //     .attr("rx", 4)
+  //     .attr("ry", 4)
+  //     .attr("id", function(d) {return d.id})
+  //     .style("fill", function(d) { return color(d.state)} )
+  //     .style("stroke-width", 4)
+  //     .style("stroke", "none")
+  //     .style("opacity", 0.8)
+  //   .on("mouseover", mouseover)
+  //   .on("mousemove", mousemove)
+  //   .on("mouseleave", mouseleave);
     // .transition()
     // .duration(1000)
     // .attr("width", function (d) { console.log(d.scaleX); return d.scaleX } )
     // .attr("height", function (d) { console.log(d.scaleY); return d.scaleY } )
 
 
-    let rectsScale = d3.select('#dataviz').selectAll('rect')
-                .data(d3Data, function (d) { return d.scaleX + ':' + d.scaleY; })
-                .enter().selectAll('rect')
-                .transition()
-                .duration(1000)
-                .attr("width",  x.bandwidth() )
-                .attr("height", y.bandwidth() )
-                .transition()
-                .duration(1000)
-                .attr("x", function(d) { return x(d.x) })
-                .attr("y", function(d) { return y(d.y) })
+    // let rectsScale = d3.select('#dataviz').selectAll('rect')
+    //             .data(d3Data, function (d) { return d.scaleX + ':' + d.scaleY; })
+    //             .enter().selectAll('rect')
+    //             .transition()
+    //             .duration(1000)
+    //             .attr("width",  x.bandwidth() )
+    //             .attr("height", y.bandwidth() )
+    //             .transition()
+    //             .duration(1000)
+    //             .attr("x", function(d) { return x(d.x) })
+    //             .attr("y", function(d) { return y(d.y) })
     // let rectsPos = d3.select('#dataviz').selectAll('rect')
     //             .data(d3Data, function (d) { return d.scaleX + ':' + d.scaleY; })
     //             .enter().selectAll('rect')
