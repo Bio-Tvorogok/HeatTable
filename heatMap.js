@@ -106,8 +106,10 @@ function createMap(data){
 
   let d3Data = createPositionArray(data, cellsCount, squareSize, x.bandwidth(), y.bandwidth());
 
-  let rects = svg.selectAll("rect").data(d3Data, function(d) {return d.state});
+  let rects = svg.selectAll("#rectGroup").data(d3Data, function(d) {return d.state + ':' + d.id });
 
+  //TODO Fix rect moving when data no changing
+  //TODO When exit delet <g> with rect
 
   rects.enter()
       .append('g')
@@ -129,8 +131,23 @@ function createMap(data){
       .attr("x", function(d) { return x(d.x) })
       .attr("y", function(d) { return y(d.y) });
 
+ // let lables = d3.select('#dataviz').selectAll("#rectGroup");
+  rects.enter()
+       .append('a')
+       .attr('id', 'idLink')
+       .attr("xlink:href", function(d) { return d.link })
+       .append("text")
+       .attr("text-anchor", "left")
+       .attr("x", x.bandwidth() / 2)
+       .attr("y", y.bandwidth() / 2)
+       .style("text-anchor", "middle")
+       .style("font-size", "22px")
+       .style("position", "relative")
+       .text(function(d) { return d.id });
 
-  // let lables = d3.select('#dataviz').selectAll("#rectGroup").data(data);
+
+
+  //let lables = d3.select('#dataviz').selectAll("#rectGroup").data(data);
 
   // lables.enter().append("a")
   //     .attr("xlink:href", function(d) { return d.link })
@@ -157,15 +174,24 @@ function createMap(data){
     .exit()
     .remove();
 
-  d3.select('#dataviz').selectAll('rect')
+  d3.select('#dataviz').selectAll('#rectGroup').select('rect')
        .transition()
        .duration(600)
        .attr("width",  x.bandwidth() )
        .attr("height", y.bandwidth() )
+       .on('end', function() {
+          d3.select('#dataviz').selectAll('#idLink').select('text')
+          .transition()
+          .duration(600)
+          .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
+          .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2 });
+       })
        .transition()
        .duration(600)
        .attr("x", function(d) { return x(d.x) })
        .attr("y", function(d) { return y(d.y) });
+
+
 
   // d3.select('#dataviz').selectAll('rect')
   //      .transition()
