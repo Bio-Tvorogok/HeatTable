@@ -110,6 +110,8 @@ function createMap(data){
 
 
   rects.enter()
+      .append('g')
+      .attr('id', 'rectGroup')
       .append('rect')
       .attr("rx", 4)
       .attr("ry", 4)
@@ -126,6 +128,22 @@ function createMap(data){
       .duration(600)
       .attr("x", function(d) { return x(d.x) })
       .attr("y", function(d) { return y(d.y) });
+
+
+  // let lables = d3.select('#dataviz').selectAll("#rectGroup").data(data);
+
+  // lables.enter().append("a")
+  //     .attr("xlink:href", function(d) { return d.link })
+  //     .append("text")
+  //     .attr("text-anchor", "left")
+  //     .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
+  //     .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2 })
+  //     .style("text-anchor", "middle")
+  //     .style("font-size", "22px")
+  //     .style("position", "relative")
+  //     .text(function(d) { return d.id })
+  //     // .on("mouseover", mouseover)
+  //     // .on("mouseleave", mouseleave);
 
 
 
