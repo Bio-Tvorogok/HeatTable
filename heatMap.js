@@ -35,6 +35,16 @@ let tooltip = d3.select("#dataviz")
   .style("padding", "5px")
   .style("position", "absolute");
 
+let mouseoverText = function(d) {
+  d3.select(this)
+    .style("font-weight", 1000);
+}
+
+let mouseleaveText = function(d){
+  d3.select(this)
+    .style("font-weight", 100);
+}
+
 let mouseover = function(d) {
   tooltip.style("opacity", 1);
   d3.select(this)
@@ -108,31 +118,42 @@ function createMap(data){
 
   let rects = svg.selectAll("#rectGroup").data(d3Data, function(d) {return d.state + ':' + d.id });
 
-  //TODO Fix rect moving when data no changing
+
   //TODO When exit delet <g> with rect
+  //TODO Color update
+
+
 
   rects.enter()
       .append('g')
       .attr('id', 'rectGroup')
       .append('rect')
-      .attr("rx", 4)
-      .attr("ry", 4)
+      .attr("rx", 6)
+      .attr("ry", 6)
       .attr("id", function(d) {return d.id})
+      .attr("width", 0 )
+      .attr("height", 0 )
       .style("fill", function(d) { return color(d.state)} )
       .style("stroke-width", 4)
       .style("stroke", "none")
       .style("opacity", 0.8)
-      .on("mouseover", mouseover)
-      .on("mousemove", mousemove)
-      .on("mouseleave", mouseleave)
-      //.style("text-anchor", "middle")
-      .transition()
-      .duration(600)
-      .attr("x", function(d) { return x(d.x) })
-      .attr("y", function(d) { return y(d.y) });
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave)
+          .transition()
+          .duration(600)
+          .attr("x", function(d) { return x(d.x) })
+          .attr("y", function(d) { return y(d.y) })
 
- // let lables = d3.select('#dataviz').selectAll("#rectGroup");
-  rects.enter()
+  //TODO change this
+
+  var text = svg.selectAll("#rectGroup")
+  .data(d3Data, function(d) { return d.id });
+  console.log(text);
+  text
+       .filter(function(d, i) { 
+         return text.select('#idLink').empty();
+       })
        .append('a')
        .attr('id', 'idLink')
        .attr("xlink:href", function(d) { return d.link })
@@ -140,35 +161,18 @@ function createMap(data){
        .attr("text-anchor", "left")
        .attr("x", x.bandwidth() / 2)
        .attr("y", y.bandwidth() / 2)
+       .attr("opacity", 0)
        .style("text-anchor", "middle")
-       .style("font-size", "22px")
+       .style("font-size", "35px")
        .style("position", "relative")
-       .text(function(d) { return d.id });
+       .text(function(d) { return d.id })
+        .on("mouseover", mouseoverText)
+        .on("mouseleave", mouseleaveText)
+          .transition()
+          .duration(600)
+          .attr("opacity", 1)
 
-
-
-  //let lables = d3.select('#dataviz').selectAll("#rectGroup").data(data);
-
-  // lables.enter().append("a")
-  //     .attr("xlink:href", function(d) { return d.link })
-  //     .append("text")
-  //     .attr("text-anchor", "left")
-  //     .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
-  //     .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2 })
-  //     .style("text-anchor", "middle")
-  //     .style("font-size", "22px")
-  //     .style("position", "relative")
-  //     .text(function(d) { return d.id })
-  //     // .on("mouseover", mouseover)
-  //     // .on("mouseleave", mouseleave);
-
-
-
-  // rects.exit()
-  //   .transition()
-  //   .duration(600)
-  //   .attr("width",  0 )
-  //   .attr("height", 0 );
+  //  text.exit().remove();
 
   rects
     .exit()
@@ -192,122 +196,12 @@ function createMap(data){
        .attr("y", function(d) { return y(d.y) });
 
 
-
-  // d3.select('#dataviz').selectAll('rect')
-  //      .transition()
-  //      .duration(1000)
-  //      .attr("x", function(d) { return x(d.x) })
-  //      .attr("y", function(d) { return y(d.y) })
-
-
-
-
-  // rects.enter()
-  // .append("g")
-  // .attr("id", "rectGroup")
-  // .attr("x", function(d) { return x(d.x) })
-  // .attr("y", function(d) { return y(d.y) })
-  //   .append('rect')
-  //     // .attr("x", function(d) { return x(d.x) })
-  //     // .attr("y", function(d) { return y(d.y) })
-  //     .attr("rx", 4)
-  //     .attr("ry", 4)
-  //     .attr("id", function(d) {return d.id})
-  //     .style("fill", function(d) { return color(d.state)} )
-  //     .style("stroke-width", 4)
-  //     .style("stroke", "none")
-  //     .style("opacity", 0.8)
-  //   .on("mouseover", mouseover)
-  //   .on("mousemove", mousemove)
-  //   .on("mouseleave", mouseleave);
-    // .transition()
-    // .duration(1000)
-    // .attr("width", function (d) { console.log(d.scaleX); return d.scaleX } )
-    // .attr("height", function (d) { console.log(d.scaleY); return d.scaleY } )
-
-
-    // let rectsScale = d3.select('#dataviz').selectAll('rect')
-    //             .data(d3Data, function (d) { return d.scaleX + ':' + d.scaleY; })
-    //             .enter().selectAll('rect')
-    //             .transition()
-    //             .duration(1000)
-    //             .attr("width",  x.bandwidth() )
-    //             .attr("height", y.bandwidth() )
-    //             .transition()
-    //             .duration(1000)
-    //             .attr("x", function(d) { return x(d.x) })
-    //             .attr("y", function(d) { return y(d.y) })
-    // let rectsPos = d3.select('#dataviz').selectAll('rect')
-    //             .data(d3Data, function (d) { return d.scaleX + ':' + d.scaleY; })
-    //             .enter().selectAll('rect')
-    //             .transition()
-    //             .duration(1000)
-    //             .attr("x", function(d) { return x(d.x) })
-    //             .attr("y", function(d) { return y(d.y) })
-
-    // rects.enter().selectAll('rect')
-    // //rects.enter().selectAll('rect')
-    // .transition()
-    // .duration(1000)
-    // .attr("x", function(d) { return x(d.x) })
-    // .attr("y", function(d) { return y(d.y) })
-
-
-
     console.log(2);
 
 
   //setLables(d3Data, x, y)
 
 }
-
-// function update(data) {
-
-//   let cellsCount = Object.keys(data).length;
-//   let squareSize = Math.ceil(Math.sqrt(cellsCount));
-//   let d3Data = createPositionArray(data, cellsCount, squareSize);
-
-//   let svg = d3.select("#rectGroup")
-//               .selectAll("#rectGroup")
-//               .data(d3Data);
-  
-//   svg.enter()
-//      .merge(svg)
-//      .transition();
-     
-//   svg.exit().remove();
-// }
-
-// function setLables(data, x, y) {
-
-//   let mouseover = function(d) {
-//     d3.select(this)
-//       .style("font-weight", 1000);
-//   }
-
-//   let mouseleave = function(d){
-//     d3.select(this)
-//       .style("font-weight", 100);
-//   }
-
-
-//   let svg = d3.select("#dataviz");
-//   let lables = svg.selectAll("#rectGroup").data(data);
-
-//   lables.exit().remove();
-//   lables.append("a")
-//      .attr("xlink:href", function(d) { return d.link })
-//      .append("text")
-//      .attr("text-anchor", "left")
-//      .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
-//      .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2 })
-//      .style("text-anchor", "middle")
-//      .style("font-size", "22px")
-//      .style("position", "relative")
-//      .text(function(d) { return d.id })
-//      .on("mouseover", mouseover)
-//      .on("mouseleave", mouseleave);
-// }
 
 function getMargin() {
   let margin = {top: 1, right: 1, bottom: 1, left: 1};
