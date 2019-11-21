@@ -13,7 +13,7 @@ const colorBySignal = new Map([
 
 const jsonData = ["update-data.json", "update-data2.json", "update-data3.json"];
 
-var isGenerate = false;
+let ccupiedPositions = new Map();
 
 let margin = getMargin();
 let width = 450 - margin.left - margin.right,
@@ -67,7 +67,7 @@ let mouseleave = function(d){
   .style("opacity", 0.8);
 }
 
-loop();
+//loop();
 
 async function loop() {
   let i = 0;
@@ -82,12 +82,7 @@ async function loop() {
 
 function updateMap(jsonName){
   $.getJSON(jsonName, function(json){
-    //if (!isGenerate) {
       createMap(json);
-      isGenerate = true;
-    // } else {
-    //   update(json);
-    // }
   });
 }
 
@@ -207,6 +202,7 @@ function createMap(data){
        .duration(600)
        .attr("width",  x.bandwidth() )
        .attr("height", y.bandwidth() )
+       .style("fill", function(d) { return color(d.state)} )
        .on('end', function() {
         let lables = d3.select('#dataviz').selectAll('#idLink').select('text')
         .data(d3Data);
