@@ -11,6 +11,8 @@ const colorBySignal = new Map([
   [8, "black"]
 ]);
 
+const jsonData = ["update-data.json", "update-data2.json", "update-data3.json"];
+
 var isGenerate = false;
 
 let margin = getMargin();
@@ -65,6 +67,18 @@ let mouseleave = function(d){
   .style("opacity", 0.8);
 }
 
+loop();
+
+async function loop() {
+  let i = 0;
+  console.log("init");
+  while(true) {
+    await sleep(2000)
+    console.log("update with - " + jsonData[i]);
+    updateMap(jsonData[i]);
+    i = (i + 1) % 3;
+  }
+}
 
 function updateMap(jsonName){
   $.getJSON(jsonName, function(json){
@@ -130,6 +144,8 @@ function createMap(data){
       .attr("id", function(d) {return d.id})
       .attr("width", 0 )
       .attr("height", 0 )
+      .attr("x", function(d) { return x(d.x) })
+      .attr("y", function(d) { return y(d.y) })
       .style("fill", function(d) { return color(d.state)} )
       .style("stroke-width", 4)
       .style("stroke", "none")
@@ -148,8 +164,8 @@ function createMap(data){
       .attr("xlink:href", function(d) { return d.link })
       .append("text")
       .attr("text-anchor", "left")
-      .attr("x", x.bandwidth() / 2)
-      .attr("y", y.bandwidth() / 2)
+      .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
+      .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2 })
       .attr("opacity", 0)
       .style("text-anchor", "middle")
       .style("font-size", "35px")
@@ -157,9 +173,7 @@ function createMap(data){
       .text(function(d) { return d.id })
       .on("mouseover", mouseoverText)
       .on("mouseleave", mouseleaveText)
-        .transition()
-        .duration(600)
-        .attr("opacity", 1)
+
 
   //TODO change this
 
@@ -194,17 +208,20 @@ function createMap(data){
        .attr("width",  x.bandwidth() )
        .attr("height", y.bandwidth() )
        .on('end', function() {
-          d3.select('#dataviz').selectAll('#idLink').select('text')
-          .data(d3Data)
-          .transition()
-          .duration(600)
-          .attr("x", function(d) { console.log("x: " + d.x + " / " + x(d.x) + x.bandwidth() / 2); return x(d.x) + x.bandwidth() / 2; })
-          .attr("y", function(d) { console.log("y: " + d.y + " / " + y(d.y) + y.bandwidth() / 2); return y(d.y) + y.bandwidth() / 2; });
+        let lables = d3.select('#dataviz').selectAll('#idLink').select('text')
+        .data(d3Data);
+        
+        lables.transition()
+        .duration(600)
+        .attr("x", function(d) { console.log("x: " + d.x + " / " + x(d.x) + x.bandwidth() / 2); return x(d.x) + x.bandwidth() / 2; })
+        .attr("y", function(d) { console.log("y: " + d.y + " / " + y(d.y) + y.bandwidth() / 2); return y(d.y) + y.bandwidth() / 2; })
+        .attr("opacity", 1)
        })
        .transition()
        .duration(600)
        .attr("x", function(d) { return x(d.x) })
        .attr("y", function(d) { return y(d.y) });
+
 
 
     console.log(2);
@@ -235,4 +252,9 @@ function createPositionArray(data, length, squareSize, scaleSquareX, scaleSquare
   }
 
   return dataArr;
+}
+
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
