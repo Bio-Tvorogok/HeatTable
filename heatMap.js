@@ -86,9 +86,6 @@ function createMap(data){
   let groups = Array.from(Array(squareSize).keys());
   let vars = Array.from(Array(squareSize).keys());
 
-  //let d3Data = createPositionArray(data, cellsCount, squareSize);
-
-
   let x = d3.scaleBand()
             .range([0, width])
             .domain(groups)
@@ -115,18 +112,18 @@ function createMap(data){
 
 
   let d3Data = createPositionArray(data, cellsCount, squareSize, x.bandwidth(), y.bandwidth());
-
-  let rects = svg.selectAll("#rectGroup").data(d3Data, function(d) {return d.state + ':' + d.id });
+  console.log(d3Data);
+  let rects = svg.selectAll("#rectGroup").data(d3Data, function(d) { return d.id; });
 
 
   //TODO When exit delet <g> with rect
   //TODO Color update
 
+  let cells = rects.enter()
+       .append('g')
+       .attr('id', 'rectGroup');
 
-
-  rects.enter()
-      .append('g')
-      .attr('id', 'rectGroup')
+  cells
       .append('rect')
       .attr("rx", 6)
       .attr("ry", 6)
@@ -145,32 +142,45 @@ function createMap(data){
           .attr("x", function(d) { return x(d.x) })
           .attr("y", function(d) { return y(d.y) })
 
+  cells
+      .append('a')
+      .attr('id', 'idLink')
+      .attr("xlink:href", function(d) { return d.link })
+      .append("text")
+      .attr("text-anchor", "left")
+      .attr("x", x.bandwidth() / 2)
+      .attr("y", y.bandwidth() / 2)
+      .attr("opacity", 0)
+      .style("text-anchor", "middle")
+      .style("font-size", "35px")
+      .style("position", "relative")
+      .text(function(d) { return d.id })
+      .on("mouseover", mouseoverText)
+      .on("mouseleave", mouseleaveText)
+        .transition()
+        .duration(600)
+        .attr("opacity", 1)
+
   //TODO change this
 
-  var text = svg.selectAll("#rectGroup")
-  .data(d3Data, function(d) { return d.id });
-  console.log(text);
-  text
-       .filter(function(d, i) { 
-         return text.select('#idLink').empty();
-       })
-       .append('a')
-       .attr('id', 'idLink')
-       .attr("xlink:href", function(d) { return d.link })
-       .append("text")
-       .attr("text-anchor", "left")
-       .attr("x", x.bandwidth() / 2)
-       .attr("y", y.bandwidth() / 2)
-       .attr("opacity", 0)
-       .style("text-anchor", "middle")
-       .style("font-size", "35px")
-       .style("position", "relative")
-       .text(function(d) { return d.id })
-        .on("mouseover", mouseoverText)
-        .on("mouseleave", mouseleaveText)
-          .transition()
-          .duration(600)
-          .attr("opacity", 1)
+      // rects
+      //  .append('a')
+      //  .attr('id', 'idLink')
+      //  .attr("xlink:href", function(d) { return d.link })
+      //  .append("text")
+      //  .attr("text-anchor", "left")
+      //  .attr("x", x.bandwidth() / 2)
+      //  .attr("y", y.bandwidth() / 2)
+      //  .attr("opacity", 0)
+      //  .style("text-anchor", "middle")
+      //  .style("font-size", "35px")
+      //  .style("position", "relative")
+      //  .text(function(d) { return d.id })
+      //   .on("mouseover", mouseoverText)
+      //   .on("mouseleave", mouseleaveText)
+      //     .transition()
+      //     .duration(600)
+      //     .attr("opacity", 1)
 
   //  text.exit().remove();
 
@@ -185,10 +195,11 @@ function createMap(data){
        .attr("height", y.bandwidth() )
        .on('end', function() {
           d3.select('#dataviz').selectAll('#idLink').select('text')
+          .data(d3Data)
           .transition()
           .duration(600)
-          .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
-          .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2 });
+          .attr("x", function(d) { console.log("x: " + d.x + " / " + x(d.x) + x.bandwidth() / 2); return x(d.x) + x.bandwidth() / 2; })
+          .attr("y", function(d) { console.log("y: " + d.y + " / " + y(d.y) + y.bandwidth() / 2); return y(d.y) + y.bandwidth() / 2; });
        })
        .transition()
        .duration(600)

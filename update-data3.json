@@ -1,9 +1,9 @@
 [
    {
-      "state": 5,
+      "state": 4,
       "target-path": "base-target",
       "display-path": "base-path",
-      "id" : 100,
+      "id" : 102,
       "text" : "text",
       "linkto" : "https://mail.ru/"
    },
@@ -16,7 +16,7 @@
       "linkto" : "https://stackoverflow.com/questions/34920956/make-text-a-link-in-svg/43455041"
    },
    {
-      "state": 3,
+      "state": 1,
       "target-path": "base-target",
       "display-path": "base-path",
       "id" : 57,
@@ -24,7 +24,7 @@
       "linkto" : "https://habr.com/ru/post/273471/"
    },
    {
-      "state": 2,
+      "state": 5,
       "target-path": "base-target",
       "display-path": "base-path",
       "id" : 4,
