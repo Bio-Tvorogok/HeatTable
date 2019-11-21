@@ -13,7 +13,7 @@ const colorBySignal = new Map([
 
 const jsonData = ["update-data.json", "update-data2.json", "update-data3.json"];
 
-let ccupiedPositions = new Map();
+let prevPositionsByID = new Map();
 
 let margin = getMargin();
 let width = 450 - margin.left - margin.right,
@@ -121,12 +121,7 @@ function createMap(data){
 
 
   let d3Data = createPositionArray(data, cellsCount, squareSize, x.bandwidth(), y.bandwidth());
-  console.log(d3Data);
   let rects = svg.selectAll("#rectGroup").data(d3Data, function(d) { return d.id; });
-
-
-  //TODO When exit delet <g> with rect
-  //TODO Color update
 
   let cells = rects.enter()
        .append('g')
@@ -167,31 +162,7 @@ function createMap(data){
       .style("position", "relative")
       .text(function(d) { return d.id })
       .on("mouseover", mouseoverText)
-      .on("mouseleave", mouseleaveText)
-
-
-  //TODO change this
-
-      // rects
-      //  .append('a')
-      //  .attr('id', 'idLink')
-      //  .attr("xlink:href", function(d) { return d.link })
-      //  .append("text")
-      //  .attr("text-anchor", "left")
-      //  .attr("x", x.bandwidth() / 2)
-      //  .attr("y", y.bandwidth() / 2)
-      //  .attr("opacity", 0)
-      //  .style("text-anchor", "middle")
-      //  .style("font-size", "35px")
-      //  .style("position", "relative")
-      //  .text(function(d) { return d.id })
-      //   .on("mouseover", mouseoverText)
-      //   .on("mouseleave", mouseleaveText)
-      //     .transition()
-      //     .duration(600)
-      //     .attr("opacity", 1)
-
-  //  text.exit().remove();
+      .on("mouseleave", mouseleaveText);
 
   rects
     .exit()
@@ -209,8 +180,8 @@ function createMap(data){
         
         lables.transition()
         .duration(600)
-        .attr("x", function(d) { console.log("x: " + d.x + " / " + x(d.x) + x.bandwidth() / 2); return x(d.x) + x.bandwidth() / 2; })
-        .attr("y", function(d) { console.log("y: " + d.y + " / " + y(d.y) + y.bandwidth() / 2); return y(d.y) + y.bandwidth() / 2; })
+        .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2; })
+        .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2; })
         .attr("opacity", 1)
        })
        .transition()
@@ -219,10 +190,8 @@ function createMap(data){
        .attr("y", function(d) { return y(d.y) });
 
 
-
-    console.log(2);
-
-
+  setPositionsMap(d3Data);
+  console.log(prevPositionsByID);
   //setLables(d3Data, x, y)
 
 }
@@ -233,21 +202,64 @@ function getMargin() {
 }
 
 function createPositionArray(data, length, squareSize, scaleSquareX, scaleSquareY){
-
+  let tmpPositions = [...prevPositionsByID.values()];
   let dataArr = new Array(length);
   for (let i = 0; i < length; i++) {
-    dataArr[i] = {
-      y : i % squareSize,
-      x : Math.floor(i / squareSize),
-      id : +data[i]["id"],
-      state : +data[i]["state"],
-      link : data[i]["linkto"],
-      scaleX : scaleSquareX,
-      scaleY : scaleSquareY
+    let prevItem = prevPositionsByID.get(+data[i]["id"]);
+    if (prevItem !== undefined) {
+        dataArr[i] = {
+          y : prevItem.y,
+          x : prevItem.x,
+          id : +data[i]["id"],
+          state : +data[i]["state"],
+          link : data[i]["linkto"],
+          scaleX : scaleSquareX,
+          scaleY : scaleSquareY
+      }
+    } else {
+      for (let posIter = 0; posIter < squareSize * squareSize; posIter++){
+        let x = Math.floor(posIter / squareSize);
+        let y = posIter % squareSize;
+        let findValue = tmpPositions.find(function(element) {return (element.x === x) && (element.y === y)});
+
+        if (findValue === undefined) {
+          dataArr[i] = {
+            y : y,
+            x : x,
+            id : +data[i]["id"],
+            state : +data[i]["state"],
+            link : data[i]["linkto"],
+            scaleX : scaleSquareX,
+            scaleY : scaleSquareY
+          }
+          tmpPositions.push({x: x, y: y});
+          break;
+        }
+      }
     }
   }
+  // for (let i = 0; i < length; i++) {
 
+  //   dataArr[i] = {
+  //     y : i % squareSize,
+  //     x : Math.floor(i / squareSize),
+  //     id : +data[i]["id"],
+  //     state : +data[i]["state"],
+  //     link : data[i]["linkto"],
+  //     scaleX : scaleSquareX,
+  //     scaleY : scaleSquareY
+  //   }
+  // }
+  console.log(dataArr)
   return dataArr;
+}
+
+
+function setPositionsMap(data) {
+  prevPositionsByID.clear();
+  data.forEach(element => {
+    prevPositionsByID.set(element.id, { x: element.x, y: element.y });
+  });
 }
 
 
