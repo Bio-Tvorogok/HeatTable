@@ -109,10 +109,7 @@ function createMap(data){
             .range([height, 0])
             .domain(vars)
             .padding(0.1);
-  svg.append("g")
-      .style("font-size", 0)
-      .call(d3.axisLeft(y).tickSize(0))
-      .select(".domain").remove()
+
 
   let color = function(signalValue){
     let col = colorBySignal.get(parseInt(signalValue));
@@ -160,13 +157,7 @@ function createMap(data){
       .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
       .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2 })
       .attr("opacity", 0)
-      // .attr("typeface", )
-      // .attr("text-anchor", "left")
-      // .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
-      // .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2 })
-      // .attr("opacity", 0)
       .style("text-anchor", "middle")
-      //.style("font-size", "35px")
       .style("position", "relative")
       .text(function(d) { return d.id })
       .on("mouseover", mouseoverText)
@@ -210,13 +201,9 @@ function getMargin() {
 function createPositionArray(data, length, squareSize, scaleSquareX, scaleSquareY){
   prevPositionsByID = filterPrevArray(prevPositionsByID, data);
   let tmpPositions = [...prevPositionsByID.values()];
-  let emptyMap = false;
-  if (!tmpPositions.length)
-      emptyMap = true;
   let dataArr = new Array(length);
   for (let i = 0; i < length; i++) {
-    
-    
+
     let prevItem = prevPositionsByID.get(+data[i]["id"]);
     if (prevItem !== undefined) {
           dataArr[i] = {
@@ -246,7 +233,6 @@ function createPositionArray(data, length, squareSize, scaleSquareX, scaleSquare
                     scaleY : scaleSquareY
                 }
                   tmpPositions.push(pos);
-                  emptyMap = false;
                   break;
             }
         }
@@ -268,9 +254,6 @@ function filterPrevArray(posArray, data){
   });
 
   return posArray;
-  // for (let i = 0; i < length; i++){
-  //   if (posArray.)
-  // }
 }
 
 function setPositionsMap(data, squareSize) {
@@ -279,9 +262,6 @@ function setPositionsMap(data, squareSize) {
     prevPositionsByID.set(data[i].id,  data[i].x * squareSize + data[i].y);
   }
 
-  // data.forEach(element => {
-  //   prevPositionsByID.set(element.id, element.x);
-  // });
 }
 
 
