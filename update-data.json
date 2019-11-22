@@ -16,6 +16,14 @@
       "linkto" : "https://stackoverflow.com/questions/34920956/make-text-a-link-in-svg/43455041"
    },
    {
+      "state": 2,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 45,
+      "text" : "text",
+      "linkto" : "http://bl.ocks.org/aditeyapandey/f10befa4d9e756460cd3"
+   },
+   {
       "state": 1,
       "target-path": "base-target",
       "display-path": "base-path",
