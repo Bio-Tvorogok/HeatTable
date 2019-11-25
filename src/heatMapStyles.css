@@ -24,3 +24,10 @@
     position: absolute;
     font-size: 20px;
 }
+
+
+.p1 {
+    stroke-width: 4;
+    stroke: none;
+    opacity: 0.6;
+}

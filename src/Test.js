@@ -1,15 +1,17 @@
 require.config({
     paths: {
         jquery: 'libs/jquery-2.1.1.min',
-        d3: 'https://d3js.org/d3.v4'
+        d3: 'https://d3js.org/d3.v4',
+        md5: 'md5/md5.min'
     }
 });
 
-requirejs(['jquery', 'heatMap'],
-function   ($, sub) {
+requirejs(['jquery', 'heatMap', 'md5'],
+function   ($, sub, md5) {
 
-     sub.HeatMap();
-     loop(sub, $);
+    sub.HeatMap();
+    loop(sub, $);
+    //console.log(md5('value'));
     // let jsonArr = new Array();
 
     // $.getJSON('update-data.json', function(json){
@@ -32,7 +34,7 @@ function   ($, sub) {
     //loop(jsonArr, sub);
     //console.log(jsonArr);
     // console.log("json - " + json);
-        
+
     // sub.initCtrl("#dataviz", undefined, undefined);
 
     // let i = 0;

@@ -145,13 +145,6 @@ define([
             .append("div")
             .attr("id", "tooltipInfo")
             .attr("class", "tooltip")
-                // .style("opacity", 0)
-                // .style("background-color", "white")
-                // .style("border", "solid")
-                // .style("border-width", "2px")
-                // .style("border-radius", "5px")
-                // .style("padding", "5px")
-                // .style("position", "absolute");
 
             this.svg = d3.select(contId)
             .append("svg")
