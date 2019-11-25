@@ -185,7 +185,7 @@ function createMap(data){
        .on('start', function() {
         let lables = d3.select('#dataviz').selectAll('#idLink').select('text')
         .data(d3Data);
-        
+
         lables.transition()
         .duration(600)
         .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2; })

@@ -10,7 +10,17 @@ requirejs(['jquery', 'heatMap', 'md5'],
 function   ($, sub, md5) {
 
     sub.HeatMap();
-    loop(sub, $);
+    //loop(sub, $);
+
+    $.getJSON('data/settings.json', function(settings){
+        let textSettings = settings['text']['cls'];
+        let key = md5(textSettings);
+        let sheet = document.createElement('style');
+        sheet.innerHTML = ".p" + key + ` { ${textSettings} }`;
+        document.body.appendChild(sheet);
+        loop(sub, $);
+    });
+
     //console.log(md5('value'));
     // let jsonArr = new Array();
 

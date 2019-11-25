@@ -6,13 +6,13 @@
     opacity: 0.6;
 }
 
-#dataviz #textData {
+/* #dataviz #textData {
     font-size: 2em;
     font-family: 'Open Sans', sans-serif;
     font-weight: 500;
     text-anchor: middle;
     position: relative;
-}
+} */
 
 #dataviz #tooltipInfo {
     opacity: 0;

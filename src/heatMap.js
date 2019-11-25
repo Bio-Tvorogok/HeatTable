@@ -289,6 +289,7 @@ define([
 
             lincksRect
                 .append("text")
+                .attr("class", "pd810cbe3fe6823fc4a54743ff53d27b4")
                 .attr("id", "textData")
                 .attr('text-anchor', 'middle')
                 .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
