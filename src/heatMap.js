@@ -189,7 +189,7 @@ define([
                 tooltipCurrent.html("The exact value of<br>this cell is: " + d.state)
                 .style("left", (d3.mouse(this)[0]+70) + "px")
                 .style("top", (d3.mouse(this)[1]) + "px")
-                .style("font-size", "20px")
+                //.style("font-size", "20px")
             };
 
             this.mouseleave = function(d){
@@ -272,7 +272,11 @@ define([
 
             let color = this.colorBySignal
 
-            cells
+            let lincksRect = cells
+                .append("a")
+                .attr("xlink:href", function(d) { return d.link })
+
+            lincksRect
                 .append('rect')
                 .attr("rx", 15)
                 .attr("ry", 15)
@@ -290,19 +294,16 @@ define([
                             .attr("x", function(d) { return x(d.x) })
                             .attr("y", function(d) { return y(d.y) })
 
-            cells
-                .append('a')
-                .attr('id', 'idLink')
-                .attr("xlink:href", function(d) { return d.link })
-                    .append("text")
-                    .attr("id", "textData")
-                    .attr('text-anchor', 'middle')
-                    .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
-                    .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2 })
-                    .attr("opacity", 0)
-                        .text(function(d) { return d.id })
-                            .on("mouseover", this.mouseoverText)
-                            .on("mouseleave", this.mouseleaveText);
+            lincksRect
+                .append("text")
+                .attr("id", "textData")
+                .attr('text-anchor', 'middle')
+                .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
+                .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2 })
+                .attr("opacity", 0)
+                    .text(function(d) { return d.id })
+                            // .on("mouseover", this.mouseoverText)
+                            // .on("mouseleave", this.mouseleaveText);
 
             rects
                 .exit()
@@ -316,7 +317,7 @@ define([
                 .attr("height", y.bandwidth() )
                 .style("fill", function(d) { return color(d.state)} )
                 .on('start', function() {
-                    let lables = d3.select('#dataviz').selectAll('#idLink').select('text')
+                    let lables = d3.select('#dataviz').selectAll('#textData')
                         .data(dataTmp);
 
                         lables
