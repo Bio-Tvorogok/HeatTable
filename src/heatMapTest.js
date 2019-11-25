@@ -109,7 +109,10 @@ function createMap(data){
             .range([height, 0])
             .domain(vars)
             .padding(0.1);
-
+  svg.append("g")
+      .style("font-size", 0)
+      .call(d3.axisLeft(y).tickSize(0))
+      .select(".domain").remove()
 
   let color = function(signalValue){
     let col = colorBySignal.get(parseInt(signalValue));
@@ -157,7 +160,13 @@ function createMap(data){
       .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
       .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2 })
       .attr("opacity", 0)
+      // .attr("typeface", )
+      // .attr("text-anchor", "left")
+      // .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
+      // .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2 })
+      // .attr("opacity", 0)
       .style("text-anchor", "middle")
+      //.style("font-size", "35px")
       .style("position", "relative")
       .text(function(d) { return d.id })
       .on("mouseover", mouseoverText)

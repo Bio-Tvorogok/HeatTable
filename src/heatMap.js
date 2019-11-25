@@ -48,7 +48,7 @@ define([
         currentOptions: undefined,
 
         defaultColorScheme: {
-            scheme: [
+            scheme: new Map ([
                     [0, "blue"],
                     [1, "green"],
                     [2, "yellow"],
@@ -57,7 +57,7 @@ define([
                     [5, "gray"],
                     [7, "white"],
                     [8, "black"]
-                ]
+                ])
         },
 
 
@@ -129,16 +129,16 @@ define([
             this.setPositionsMap = function(data, squareSize) {
                 this.prevPositionsByID.clear();
                 for (let i = 0; i < data.length; i++){
-                    prevPositionsByID.set(data[i].id,  data[i].x * squareSize + data[i].y);
+                    this.prevPositionsByID.set(data[i].id,  data[i].x * squareSize + data[i].y);
                 }
-            }
+            }.bind(this);
         },
 
         initCtrl: function(contId, options, specopt) {
             // if (options !== undefined)
             //     this.currentOptions = options;
-            let width = 450 - this.currentOptions.margin.left - this.currentOptions.margin.right,
-                height = 450 - this.currentOptions.margin.top - this.currentOptions.margin.bottom;
+            this.width = 450 - this.currentOptions.margin.left - this.currentOptions.margin.right,
+            this.height = 450 - this.currentOptions.margin.top - this.currentOptions.margin.bottom;
 
             //TODO Set Options
             this.tooltip = d3.select(contId)
@@ -154,8 +154,8 @@ define([
 
             this.svg = d3.select(contId)
             .append("svg")
-            .attr("width", width + this.currentOptions.margin.left + this.currentOptions.margin.right)
-            .attr("height", height +this.currentOptions.margin.top + this.currentOptions.margin.bottom)
+            .attr("width", this.width + this.currentOptions.margin.left + this.currentOptions.margin.right)
+            .attr("height", this.height +this.currentOptions.margin.top + this.currentOptions.margin.bottom)
                 .append("g")
                 .attr("transform", "translate(" + this.currentOptions.margin.left + "," + this.currentOptions.margin.top + ")");
 
@@ -191,7 +191,7 @@ define([
 
             this.colorBySignal = function(signal) {
                 return this.defaultColorScheme.scheme.get(signal);
-            }
+            }.bind(this);
         },
 
         unInitCtrl: function(contId) {
@@ -203,7 +203,11 @@ define([
             console.warn("Warning uid not used");
             console.warn("Warning scaleN not used");
 
-            this.currentData = this.createPositionArray(data);
+            console.log(data);
+            let cellsCount = Object.keys(data).length;
+            let squareSize = Math.ceil(Math.sqrt(cellsCount));
+            this.currentData = this.createPositionArray(data, cellsCount, squareSize);
+            console.log(this.currentData);
         },
 
         getParams: function(uid, index) {
@@ -230,18 +234,18 @@ define([
             let vars = Array.from(Array(squareSize).keys());
 
             let x = d3.scaleBand()
-                .range([0, width])
+                .range([0, this.width])
                 .domain(groups)
                 .padding(0.1);
 
             this.svg.append("g")
                 .style("font-size", 0)
-                .attr("transform", "translate(0," + height + ")")
+                .attr("transform", "translate(0," + this.height + ")")
                 .call(d3.axisBottom(x).tickSize(0))
                 .select(".domain").remove();
 
             let y = d3.scaleBand()
-                .range([height, 0])
+                .range([this.height, 0])
                 .domain(vars)
                 .padding(0.1);
 
@@ -250,11 +254,17 @@ define([
                 .call(d3.axisLeft(y).tickSize(0))
                 .select(".domain").remove()
 
-            let rects = svg.selectAll("#rectGroup").data(this.currentData, function(d) { return d.id; });
+            let rects = this.svg.selectAll("#rectGroup").data(this.currentData, function(d) { return d.id; });
 
             let cells = rects.enter()
                 .append('g')
                 .attr('id', 'rectGroup');
+
+            console.log(this.colorBySignal(1));
+            // let color = function(signal) {
+            //     return super.defaultColorScheme.scheme.get(signal);
+            // }
+            let color = this.colorBySignal
 
             cells
                 .append('rect')
@@ -299,6 +309,7 @@ define([
                 .exit()
                 .remove();
 
+            let dataTmp = this.currentData;
             d3.select('#dataviz').selectAll('#rectGroup').select('rect')
                 .transition()
                 .duration(600)
@@ -307,9 +318,10 @@ define([
                 .style("fill", function(d) { return color(d.state)} )
                 .on('start', function() {
                     let lables = d3.select('#dataviz').selectAll('#idLink').select('text')
-                        .data(d3Data);
+                        .data(dataTmp);
 
-                    lables.transition()
+                        lables
+                        .transition()
                         .duration(600)
                         .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2; })
                         .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2; })
@@ -318,7 +330,7 @@ define([
                 .attr("x", function(d) { return x(d.x) })
                 .attr("y", function(d) { return y(d.y) });
 
-            this.setPositionsMap(currentData, squareSize);
+            this.setPositionsMap(this.currentData, squareSize);
         },
 
         getDataFormat: function(contId) {
