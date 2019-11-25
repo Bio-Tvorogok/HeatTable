@@ -143,14 +143,15 @@ define([
             //TODO Set Options
             this.tooltip = d3.select(contId)
             .append("div")
-            .style("opacity", 0)
+            .attr("id", "tooltipInfo")
             .attr("class", "tooltip")
-                .style("background-color", "white")
-                .style("border", "solid")
-                .style("border-width", "2px")
-                .style("border-radius", "5px")
-                .style("padding", "5px")
-                .style("position", "absolute");
+                // .style("opacity", 0)
+                // .style("background-color", "white")
+                // .style("border", "solid")
+                // .style("border-width", "2px")
+                // .style("border-radius", "5px")
+                // .style("padding", "5px")
+                // .style("position", "absolute");
 
             this.svg = d3.select(contId)
             .append("svg")
@@ -188,6 +189,7 @@ define([
                 tooltipCurrent.html("The exact value of<br>this cell is: " + d.state)
                 .style("left", (d3.mouse(this)[0]+70) + "px")
                 .style("top", (d3.mouse(this)[1]) + "px")
+                .style("font-size", "20px")
             };
 
             this.mouseleave = function(d){
@@ -268,10 +270,6 @@ define([
                 .append('g')
                 .attr('id', 'rectGroup');
 
-            console.log(this.colorBySignal(1));
-            // let color = function(signal) {
-            //     return super.defaultColorScheme.scheme.get(signal);
-            // }
             let color = this.colorBySignal
 
             cells
@@ -284,9 +282,6 @@ define([
                 .attr("x", function(d) { return x(d.x) })
                 .attr("y", function(d) { return y(d.y) })
                     .style("fill", function(d) { return color(d.state)} )
-                    .style("stroke-width", 4)
-                    .style("stroke", "none")
-                    .style("opacity", 0.8)
                         .on("mouseover", this.mouseover)
                         .on("mousemove", this.mousemove)
                         .on("mouseleave", this.mouseleave)
@@ -300,15 +295,11 @@ define([
                 .attr('id', 'idLink')
                 .attr("xlink:href", function(d) { return d.link })
                     .append("text")
+                    .attr("id", "textData")
                     .attr('text-anchor', 'middle')
                     .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
                     .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2 })
                     .attr("opacity", 0)
-                        .style('font-size', '35px')
-                        .style('font-family', '"Open Sans", sans-serif')
-                        .style('font-weight', '500')
-                        .style("text-anchor", "middle")
-                        .style("position", "relative")
                         .text(function(d) { return d.id })
                             .on("mouseover", this.mouseoverText)
                             .on("mouseleave", this.mouseleaveText);

@@ -1,0 +1,25 @@
+
+
+#dataviz rect {
+    stroke-width: 4;
+    stroke: none;
+    opacity: 0.6;
+}
+
+#dataviz #textData {
+    font-size: 2em;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 500;
+    text-anchor: middle;
+    position: relative;
+}
+
+#dataviz #tooltipInfo {
+    opacity: 0;
+    background-color: white;
+    border: solid;
+    border-width: 2.px;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+}
