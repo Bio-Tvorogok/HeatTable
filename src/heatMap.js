@@ -159,35 +159,43 @@ define([
                 .append("g")
                 .attr("transform", "translate(" + this.currentOptions.margin.left + "," + this.currentOptions.margin.top + ")");
 
+            let fontWeightOnSelectCurrent = this.currentOptions.fontWeightOnSelect
+            let fontWeightOnUnSelectCurrent = this.currentOptions.fontWeightOnUnSelect
+
             this.mouseoverText = function(d) {
                 d3.select(this)
-                    .style("font-weight", this.currentOptions.fontWeightOnSelect);
+                    .style("font-weight", fontWeightOnSelectCurrent);
                 }
 
             this.mouseleaveText = function(d){
                 d3.select(this)
-                    .style("font-weight", this.currentOptions.fontWeightOnUnSelect);
-                }
+                    .style("font-weight", fontWeightOnUnSelectCurrent);
+            }
+
+
+            let mouseLeaveOpacityCurrent = this.currentOptions.mouseLeaveOpacity
+            let mouseOverOpacityCurrent = this.currentOptions.mouseOverOpacity
+            let tooltipCurrent = this.tooltip;
 
             this.mouseover = function(d) {
-                tooltip.style("opacity", this.currentOptions.mouseOverOpacity);
+                tooltipCurrent.style("opacity", mouseOverOpacityCurrent);
                 d3.select(this)
                 .style("stroke", "black")
-                .style("opacity", this.currentOptions.mouseOverOpacity);
-                }
+                .style("opacity", mouseOverOpacityCurrent);
+            };
 
             this.mousemove = function(d){
-                tooltip.html("The exact value of<br>this cell is: " + d.state)
+                tooltipCurrent.html("The exact value of<br>this cell is: " + d.state)
                 .style("left", (d3.mouse(this)[0]+70) + "px")
                 .style("top", (d3.mouse(this)[1]) + "px")
-            }
+            };
 
             this.mouseleave = function(d){
-                tooltip.style("opacity", 0);
+                tooltipCurrent.style("opacity", 0);
                 d3.select(this)
                 .style("stroke", "none")
-                .style("opacity", this.currentOptions.mouseLeaveOpacity);
-            }
+                .style("opacity", mouseLeaveOpacityCurrent);
+            };
 
             this.colorBySignal = function(signal) {
                 return this.defaultColorScheme.scheme.get(signal);
