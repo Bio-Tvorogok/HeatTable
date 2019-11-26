@@ -13,13 +13,20 @@ define([
     }
 
     HashSetter.prototype = {
+
         initialize: function() {
 
             //TODO append
-            this.setStyleSheet = function(id, styles) {
-                let sheet = document.createElement('style');
-                sheet.innerHTML = id + ` { ${styles} }`;
-                document.body.appendChild(sheet);
+            this.setStyleSheet = function(id, styles, widgetKey) {
+                let div = this.widgetsMap.get(widgetKey);
+                if (div !== undefined) {
+                    let sheet = document.createElement('style');
+                    sheet.innerHTML = id + ` { ${styles} }`;
+                    div.appendChild(sheet);
+                }
+                // let sheet = document.createElement('style');
+                // sheet.innerHTML = id + ` { ${styles} }`;
+                // document.body.appendChild(sheet);
             }
 
             this.parseStyles = function(data) {
@@ -27,17 +34,27 @@ define([
                 return data;
             }
 
+            this.widgetsMap = new Map();
         },
 
-        Set: function(data) {
+        Set: function(data, widgetKey) {
 
             let key = md5(data);
             let id = ".p" + key;
 
             this.parseStyles(data);
-            this.setStyleSheet(id, data);
+            this.setStyleSheet(id, data, widgetKey);
 
             return "p" + key;
+        },
+
+        RegisterWidget: function() {
+            let key = md5(this.widgetsMap.size);
+            let div = document.createElement('div');
+            div.setAttribute("id", key);
+            document.body.appendChild(div);
+            this.widgetsMap.set(key, div);
+            return key;
         }
     }
 

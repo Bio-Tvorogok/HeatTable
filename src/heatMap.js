@@ -135,6 +135,7 @@ define([
         },
 
         initCtrl: function(contId, options, specopt) {
+            this.widgetKey = hash.RegisterWidget();
             // if (options !== undefined)
             //     this.currentOptions = options;
             this.width = 450 - this.currentOptions.margin.left - this.currentOptions.margin.right,
@@ -203,8 +204,11 @@ define([
 
         setStyles: function(settings){
             let textData = settings["text"]["cls"];
-            this.textStyles = hash.Set(textData);
-            //console.log(this.textStyles);
+            let rectData = settings["rect"]["cls"];
+            if (textData !== undefined)
+                this.textStyles = hash.Set(textData, this.widgetKey);
+            if (rectData !== undefined)
+                this.rectStyles = hash.Set(rectData, this.widgetKey);
         },
 
         // Json parse
@@ -278,6 +282,7 @@ define([
 
             lincksRect
                 .append('rect')
+                .attr("class", this.rectStyles)
                 .attr("rx", 15)
                 .attr("ry", 15)
                 .attr("id", function(d) {return d.id})
@@ -294,7 +299,7 @@ define([
                             .attr("x", function(d) { return x(d.x) })
                             .attr("y", function(d) { return y(d.y) })
 
-            
+
             lincksRect
                 .append("text")
                 .attr("class", this.textStyles)

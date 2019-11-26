@@ -19,8 +19,8 @@ async function loop(map, $, settings) {
     let i = 0;
     console.log("init");
     map.HeatMap();
-    map.setStyles(settings);
     map.initCtrl("#dataviz", undefined, undefined);
+    map.setStyles(settings);
     while(true) {
       await sleep(2000)
       console.log("update with - " + i);
