@@ -135,13 +135,14 @@ define([
         },
 
         initCtrl: function(contId, options, specopt) {
-            this.widgetKey = hash.RegisterWidget();
+            this.widgetKey = hash.RegisterWidget(contId);
             // if (options !== undefined)
             //     this.currentOptions = options;
             this.width = 450 - this.currentOptions.margin.left - this.currentOptions.margin.right,
             this.height = 450 - this.currentOptions.margin.top - this.currentOptions.margin.bottom;
 
             //TODO Set Options
+            contId = "#" + contId;
             this.tooltip = d3.select(contId)
             .append("div")
             .attr("id", "tooltipInfo")
@@ -199,7 +200,7 @@ define([
         },
 
         unInitCtrl: function(contId) {
-
+            hash.UnRegisterWidget(this.widgetKey);
         },
 
         setStyles: function(settings){
@@ -251,7 +252,7 @@ define([
                 .domain(groups)
                 .padding(0.1);
 
-            this.svg.append("g")
+            this.svg.enter().append("g")
                 .style("font-size", 0)
                 .attr("transform", "translate(0," + this.height + ")")
                 .call(d3.axisBottom(x).tickSize(0))
@@ -262,7 +263,7 @@ define([
                 .domain(vars)
                 .padding(0.1);
 
-            this.svg.append("g")
+            this.svg.enter().append("g")
                 .style("font-size", 0)
                 .call(d3.axisLeft(y).tickSize(0))
                 .select(".domain").remove()

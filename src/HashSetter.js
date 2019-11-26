@@ -18,15 +18,13 @@ define([
 
             //TODO append
             this.setStyleSheet = function(id, styles, widgetKey) {
-                let div = this.widgetsMap.get(widgetKey);
-                if (div !== undefined) {
+
+                if (this.widgetsMap.has(widgetKey)) {
+                    let div = this.widgetsMap.get(widgetKey);
                     let sheet = document.createElement('style');
                     sheet.innerHTML = id + ` { ${styles} }`;
                     div.appendChild(sheet);
                 }
-                // let sheet = document.createElement('style');
-                // sheet.innerHTML = id + ` { ${styles} }`;
-                // document.body.appendChild(sheet);
             }
 
             this.parseStyles = function(data) {
@@ -48,13 +46,27 @@ define([
             return "p" + key;
         },
 
-        RegisterWidget: function() {
+        RegisterWidget: function(widgetParentId) {
             let key = md5(this.widgetsMap.size);
             let div = document.createElement('div');
             div.setAttribute("id", key);
-            document.body.appendChild(div);
+
+            if (widgetParentId !== null && widgetParentId !== undefined) {
+                let parent = document.getElementById(widgetParentId);
+                if (parent !== null && parent !== undefined)
+                    parent.appendChild(div);
+                else
+                    document.body.appendChild(div);
+            } else {
+                document.body.appendChild(div);
+            }
             this.widgetsMap.set(key, div);
             return key;
+        },
+
+        UnRegisterWidget: function (widgetKey) {
+            this.widgetsMap.get(widgetKey).remove();
+            this.widgetsMap.delete(widgetKey);
         }
     }
 
