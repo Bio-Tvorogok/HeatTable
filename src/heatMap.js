@@ -21,12 +21,13 @@
  * ------| });
  */
 
-
+//TODO Check for copy
 //TODO Set Options
 define([
     'jquery',
-    'd3'
-], function($, d3) {
+    'd3',
+    'HashSetter'
+], function($, d3, hash) {
     'use strict';
 
     const HeatTables = {
@@ -62,7 +63,6 @@ define([
 
 
         HeatMap: function() {
-            console.log("HeatMap init");
             // Init current options like default
             this.currentOptions = this.defaultOptions;
             // Init prev rect positions
@@ -201,16 +201,22 @@ define([
 
         },
 
+        setStyles: function(settings){
+            let textData = settings["text"]["cls"];
+            this.textStyles = hash.Set(textData);
+            //console.log(this.textStyles);
+        },
+
         // Json parse
         setParams: function(uid, data, scaleN) {
             console.warn("Warning uid not used");
             console.warn("Warning scaleN not used");
 
-            console.log(data);
+            //console.log(data);
             let cellsCount = Object.keys(data).length;
             let squareSize = Math.ceil(Math.sqrt(cellsCount));
             this.currentData = this.createPositionArray(data, cellsCount, squareSize);
-            console.log(this.currentData);
+            //console.log(this.currentData);
         },
 
         getParams: function(uid, index) {
@@ -269,6 +275,7 @@ define([
                 .append("a")
                 .attr("xlink:href", function(d) { return d.link })
 
+
             lincksRect
                 .append('rect')
                 .attr("rx", 15)
@@ -287,9 +294,10 @@ define([
                             .attr("x", function(d) { return x(d.x) })
                             .attr("y", function(d) { return y(d.y) })
 
+            
             lincksRect
                 .append("text")
-                .attr("class", "pd810cbe3fe6823fc4a54743ff53d27b4")
+                .attr("class", this.textStyles)
                 .attr("id", "textData")
                 .attr('text-anchor', 'middle')
                 .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
