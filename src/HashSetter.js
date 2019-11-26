@@ -17,13 +17,45 @@ define([
         initialize: function() {
 
             //TODO append
-            this.setStyleSheet = function(id, styles, widgetKey) {
+            this.setStyleSheet = function(id, styleClass, styles, widgetKey) {
+
+                this.checkElementByID = function() {
+                    let div = this.widgetsMap.get(widgetKey);
+                    for(var i = 0; i < div.childNodes.length; i++)
+                    {
+                        if (div.childNodes[i].getAttribute('id') == id) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+                this.findByClass = function() {
+                    let div = this.widgetsMap.get(widgetKey);
+                    for(var i = 0; i < div.childNodes.length; i++)
+                    {
+                        if (div.childNodes[i].getAttribute('class') == styleClass) {
+                            return div.childNodes[i];
+                        }
+                    }
+                    return undefined;
+                }
 
                 if (this.widgetsMap.has(widgetKey)) {
                     let div = this.widgetsMap.get(widgetKey);
-                    let sheet = document.createElement('style');
-                    sheet.innerHTML = id + ` { ${styles} }`;
-                    div.appendChild(sheet);
+                    if (!this.checkElementByID()) {
+                        let oldStyles = this.findByClass();
+                        if (oldStyles !== undefined) {
+                            oldStyles.remove();
+                            console.log("removed");
+                        }
+
+                        let sheet = document.createElement('style');
+                        sheet.setAttribute("id", id);
+                        sheet.setAttribute("class", styleClass);
+                        sheet.innerHTML = ".p" + id + ` { ${styles} }`;
+                        div.appendChild(sheet);
+                    }
                 }
             }
 
@@ -35,13 +67,12 @@ define([
             this.widgetsMap = new Map();
         },
 
-        Set: function(data, widgetKey) {
+        Set: function(data, styleClass, widgetKey) {
 
             let key = md5(data);
-            let id = ".p" + key;
 
             this.parseStyles(data);
-            this.setStyleSheet(id, data, widgetKey);
+            this.setStyleSheet(key, styleClass, data, widgetKey);
 
             return "p" + key;
         },
@@ -50,7 +81,6 @@ define([
             let key = md5(this.widgetsMap.size);
             let div = document.createElement('div');
             div.setAttribute("id", key);
-
             if (widgetParentId !== null && widgetParentId !== undefined) {
                 let parent = document.getElementById(widgetParentId);
                 if (parent !== null && parent !== undefined)

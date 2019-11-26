@@ -112,6 +112,19 @@ define([
                 return dataArr;
             }
 
+            this.updateStyles = function() {
+                let rects = this.svg.selectAll("#rectGroup");
+
+                rects
+                    .select('a')
+                    .select('rect')
+                    .attr('class', this.rectStyles);
+
+                rects
+                    .select('a')
+                    .select('text')
+                    .attr('class', this.textStyles);
+            }
 
             this.filterPrevArray = function (posArray, data){
                 let dataArr = Array.from(data, e => e.id);
@@ -207,9 +220,11 @@ define([
             let textData = settings["text"]["cls"];
             let rectData = settings["rect"]["cls"];
             if (textData !== undefined)
-                this.textStyles = hash.Set(textData, this.widgetKey);
+                this.textStyles = hash.Set(textData, "text", this.widgetKey);
             if (rectData !== undefined)
-                this.rectStyles = hash.Set(rectData, this.widgetKey);
+                this.rectStyles = hash.Set(rectData, "rect", this.widgetKey);
+
+            this.updateStyles();
         },
 
         // Json parse

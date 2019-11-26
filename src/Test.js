@@ -9,7 +9,13 @@ require.config({
 requirejs(['jquery', 'heatMap'],
 function   ($, map) {
     $.getJSON('data/settings.json', function(settings){
-        loop(map, $, settings);
+        $.getJSON('data/settings2.json', function(settings2){
+            $.getJSON('data/settings3.json', function(settings3){
+                let arrData = [settings, settings2, settings3];
+                loop(map, $, arrData);
+            });
+        });
+        //loop(map, $, settings);
     });
 });
 
@@ -20,7 +26,7 @@ async function loop(map, $, settings) {
     console.log("init");
     map.HeatMap();
     map.initCtrl("dataviz", undefined, undefined);
-    map.setStyles(settings);
+    map.setStyles(settings[0]);
 
     for (let j = 0; j < 4; j++) {
         await sleep(2000)
@@ -28,7 +34,15 @@ async function loop(map, $, settings) {
         updateMap(jsonData[i], map, $);
         i = (i + 1) % 3;
     }
-    map.unInitCtrl(undefined);
+    map.setStyles(settings[1]);
+    for (let j = 0; j < 4; j++) {
+        await sleep(2000)
+        console.log("update with - " + i);
+        updateMap(jsonData[i], map, $);
+        i = (i + 1) % 3;
+    }
+    map.setStyles(settings[2]);
+    //map.unInitCtrl(undefined);
     while(true) {
       await sleep(2000)
       console.log("update with - " + i);

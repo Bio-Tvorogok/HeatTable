@@ -4,6 +4,6 @@
     },
 
     "rect": {
-        "cls": "    stroke-width: 4; stroke: none; opacity: 0.6;"
+        "cls": "    stroke-width: 4; stroke: none; opacity: 1;"
     }
 }

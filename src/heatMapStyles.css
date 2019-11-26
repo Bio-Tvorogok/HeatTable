@@ -17,6 +17,22 @@
 #dataviz #tooltipInfo {
     opacity: 0;
     background-color: white;
+    /* background-color: 
+        #f3f3f3,
+        #D8DD13,
+        #e47e09,
+        #6b2c13,
+        #940d0d, 
+        #c41c9a,
+        #5e13c0, 
+        #3b09c5, 
+        #0f4fc5, 
+        #0abeaf,
+        #09632f,
+        #20c00b, 
+        #4f6d0a, 
+        #000000,  */
+/* ; */
     border: solid;
     border-width: 2.px;
     border-radius: 5px;
