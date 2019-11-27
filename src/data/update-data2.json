@@ -3,7 +3,7 @@
       "state": 2,
       "target-path": "base-target",
       "display-path": "base-path",
-      "id" : 100,
+      "id" : 100000000000,
       "text" : "text",
       "linkto" : "https://mail.ru/"
    },

@@ -27,7 +27,7 @@
       "state": 5,
       "target-path": "base-target",
       "display-path": "base-path",
-      "id" : 4,
+      "id" : 400000000000000000,
       "text" : "text",
       "linkto" : "https://habr.com/ru/post/273471/"
    },

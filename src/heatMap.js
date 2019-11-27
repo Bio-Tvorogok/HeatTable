@@ -262,10 +262,27 @@ define([
             let groups = Array.from(Array(squareSize).keys());
             let vars = Array.from(Array(squareSize).keys());
 
+            //TODO change function declaration
+            let width = this.width;
+            let padding = 0.1;
+            let wrap = function () {
+                var self = d3.select(this),
+                textLength = self.node().getComputedTextLength(),
+                text = self.text();
+                console.log(textLength);
+                console.log("width - " + width);
+                while (textLength > ((width - 2 * padding) / squareSize) && text.length > 0) {
+
+                    text = text.slice(0, -1);
+                    self.text(text + '...');
+                    textLength = self.node().getComputedTextLength();
+                }
+            }
+
             let x = d3.scaleBand()
                 .range([0, this.width])
                 .domain(groups)
-                .padding(0.1);
+                .padding(0.05);
 
             this.svg.enter().append("g")
                 .style("font-size", 0)
@@ -276,7 +293,7 @@ define([
             let y = d3.scaleBand()
                 .range([this.height, 0])
                 .domain(vars)
-                .padding(0.1);
+                .padding(0.05);
 
             this.svg.enter().append("g")
                 .style("font-size", 0)
@@ -325,7 +342,10 @@ define([
                 .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
                 .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2 })
                 .attr("opacity", 0)
-                    .text(function(d) { return d.id });
+                    // .text(function(d) { return d.id })
+                    .append('tspan').text(function(d) { return d.id; }).each(wrap);
+
+
 
             rects
                 .exit()
@@ -342,13 +362,15 @@ define([
                     let lables = d3.select('#dataviz').selectAll('#textData')
                         .data(dataTmp);
 
+                        
+
                         lables
                         .transition()
                         .duration(600)
                         .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2; })
                         .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2; })
                         .attr("opacity", 1)
-                        .style("font-size", 1 / squareSize * 100 + "px");
+                        .style("font-size", function(d) { return 1 / squareSize * 100 + "px" });
                 })
                 .attr("x", function(d) { return x(d.x) })
                 .attr("y", function(d) { return y(d.y) });
