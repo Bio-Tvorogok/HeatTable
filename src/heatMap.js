@@ -264,12 +264,12 @@ define([
 
             //TODO change function declaration
             let width = this.width;
-            let padding = 0.1;
+            let padding = this.currentOptions.padding;
             let wrap = function () {
                 var self = d3.select(this),
                 textLength = self.node().getComputedTextLength(),
                 text = self.text();
-                while (textLength > ((width - 2 * padding) / squareSize) && text.length > 0) {
+                while (textLength > ((width - 1000 * padding) / squareSize) && text.length > 0) {
 
                     text = text.slice(0, -1);
                     self.text(text + '...');
@@ -280,7 +280,7 @@ define([
             let x = d3.scaleBand()
                 .range([0, this.width])
                 .domain(groups)
-                .padding(0.05);
+                .padding(padding);
 
             this.svg.enter().append("g")
                 .style("font-size", 0)
@@ -291,7 +291,7 @@ define([
             let y = d3.scaleBand()
                 .range([this.height, 0])
                 .domain(vars)
-                .padding(0.05);
+                .padding(padding);
 
             this.svg.enter().append("g")
                 .style("font-size", 0)
