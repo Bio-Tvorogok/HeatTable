@@ -190,7 +190,7 @@ define([
                 tooltipCurrent.style("opacity", mouseOverOpacityCurrent);
                 d3.select(this)
                 .style("stroke", "black")
-                .style("opacity", mouseOverOpacityCurrent);
+                // .style("opacity", mouseOverOpacityCurrent);
             };
 
             this.mousemove = function(d){
@@ -204,7 +204,7 @@ define([
                 tooltipCurrent.style("opacity", 0);
                 d3.select(this)
                 .style("stroke", "none")
-                .style("opacity", mouseLeaveOpacityCurrent);
+                // .style("opacity", mouseLeaveOpacityCurrent);
             };
 
             this.colorBySignal = function(signal) {
@@ -319,6 +319,7 @@ define([
             lincksRect
                 .append("text")
                 .attr("class", this.textStyles)
+                .attr("dy", ".30em")
                 .attr("id", "textData")
                 .attr('text-anchor', 'middle')
                 .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
@@ -352,7 +353,7 @@ define([
                 .attr("x", function(d) { return x(d.x) })
                 .attr("y", function(d) { return y(d.y) });
 
-            this.setPositionsMap(this.currentData, squareSize * 100 + "px");
+            this.setPositionsMap(this.currentData, squareSize);
         },
 
         getDataFormat: function(contId) {

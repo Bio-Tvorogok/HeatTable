@@ -3,7 +3,7 @@
       "state": 2,
       "target-path": "base-target",
       "display-path": "base-path",
-      "id" : 100,
+      "id" : 100000000000,
       "text" : "text",
       "linkto" : "https://mail.ru/"
    },
@@ -11,7 +11,7 @@
       "state": 5,
       "target-path": "base-target",
       "display-path": "base-path",
-      "id" : 12,
+      "id" : 1200000000000,
       "text" : "text",
       "linkto" : "https://stackoverflow.com/questions/34920956/make-text-a-link-in-svg/43455041"
    },
@@ -19,7 +19,7 @@
       "state": 2,
       "target-path": "base-target",
       "display-path": "base-path",
-      "id" : 45,
+      "id" : 4500000000000000,
       "text" : "text",
       "linkto" : "http://bl.ocks.org/aditeyapandey/f10befa4d9e756460cd3"
    },
@@ -27,7 +27,7 @@
       "state": 1,
       "target-path": "base-target",
       "display-path": "base-path",
-      "id" : 57,
+      "id" : 57000000000000000,
       "text" : "text",
       "linkto" : "https://habr.com/ru/post/273471/"
    },
@@ -35,7 +35,7 @@
       "state": 2,
       "target-path": "base-target",
       "display-path": "base-path",
-      "id" : 34,
+      "id" : 3400000000000000,
       "text" : "text",
       "linkto" : "https://blog.risingstack.com/d3-js-tutorial-bar-charts-with-javascript/"
    }
