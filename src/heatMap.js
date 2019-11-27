@@ -269,8 +269,6 @@ define([
                 var self = d3.select(this),
                 textLength = self.node().getComputedTextLength(),
                 text = self.text();
-                console.log(textLength);
-                console.log("width - " + width);
                 while (textLength > ((width - 2 * padding) / squareSize) && text.length > 0) {
 
                     text = text.slice(0, -1);
@@ -311,6 +309,7 @@ define([
             let lincksRect = cells
                 .append("a")
                 .attr("xlink:href", function(d) { return d.link })
+                .attr("target", "_blank");
 
 
             lincksRect
@@ -330,7 +329,7 @@ define([
                             .transition()
                             .duration(600)
                             .attr("x", function(d) { return x(d.x) })
-                            .attr("y", function(d) { return y(d.y) })
+                            .attr("y", function(d) { return y(d.y) });
 
 
             lincksRect
@@ -338,11 +337,9 @@ define([
                 .attr("class", this.textStyles)
                 .attr("dy", ".30em")
                 .attr("id", "textData")
-                .attr('text-anchor', 'middle')
                 .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
                 .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2 })
                 .attr("opacity", 0)
-                    // .text(function(d) { return d.id })
                     .append('tspan').text(function(d) { return d.id; }).each(wrap);
 
 

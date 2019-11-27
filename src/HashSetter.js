@@ -16,35 +16,36 @@ define([
 
         initialize: function() {
 
-            //TODO append
+            this.checkElementByID = function(widgetKey, id) {
+                let div = this.widgetsMap.get(widgetKey);
+                for(var i = 0; i < div.childNodes.length; i++)
+                {
+                    if (div.childNodes[i].getAttribute('id') == id) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            this.findByClass = function(widgetKey, styleClass) {
+                let div = this.widgetsMap.get(widgetKey);
+                for(var i = 0; i < div.childNodes.length; i++)
+                {
+                    if (div.childNodes[i].getAttribute('class') == styleClass) {
+                        return div.childNodes[i];
+                    }
+                }
+                return undefined;
+            }
+
             this.setStyleSheet = function(id, styleClass, styles, widgetKey) {
 
-                this.checkElementByID = function() {
-                    let div = this.widgetsMap.get(widgetKey);
-                    for(var i = 0; i < div.childNodes.length; i++)
-                    {
-                        if (div.childNodes[i].getAttribute('id') == id) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
 
-                this.findByClass = function() {
-                    let div = this.widgetsMap.get(widgetKey);
-                    for(var i = 0; i < div.childNodes.length; i++)
-                    {
-                        if (div.childNodes[i].getAttribute('class') == styleClass) {
-                            return div.childNodes[i];
-                        }
-                    }
-                    return undefined;
-                }
 
                 if (this.widgetsMap.has(widgetKey)) {
                     let div = this.widgetsMap.get(widgetKey);
-                    if (!this.checkElementByID()) {
-                        let oldStyles = this.findByClass();
+                    if (!this.checkElementByID(widgetKey, id)) {
+                        let oldStyles = this.findByClass(widgetKey, styleClass);
                         if (oldStyles !== undefined) {
                             oldStyles.remove();
                             console.log("removed");
