@@ -324,9 +324,7 @@ define([
                 .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
                 .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2 })
                 .attr("opacity", 0)
-                    .text(function(d) { return d.id })
-                            // .on("mouseover", this.mouseoverText)
-                            // .on("mouseleave", this.mouseleaveText);
+                    .text(function(d) { return d.id });
 
             rects
                 .exit()
@@ -349,11 +347,12 @@ define([
                         .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2; })
                         .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2; })
                         .attr("opacity", 1)
+                        .style("font-size", 1 / squareSize * 100 + "px");
                 })
                 .attr("x", function(d) { return x(d.x) })
                 .attr("y", function(d) { return y(d.y) });
 
-            this.setPositionsMap(this.currentData, squareSize);
+            this.setPositionsMap(this.currentData, squareSize * 100 + "px");
         },
 
         getDataFormat: function(contId) {
