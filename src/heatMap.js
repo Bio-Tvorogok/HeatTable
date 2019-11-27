@@ -34,6 +34,7 @@ define([
 
         this.defaultOptions = {
             padding: 0.1,
+            sorting: "state",
             margin: {
                 left: 1,
                 right: 1,
@@ -139,6 +140,22 @@ define([
                 this.prevPositionsByID.set(data[i].id,  data[i].x * squareSize + data[i].y);
             }
         }.bind(this);
+
+        this.sortingMap = function (data) {
+            switch (this.currentOptions.sorting) {
+                case "none":
+                    return data;
+                    break;
+                case "state":
+                    data.sort((a, b) => (a.state > b.state) ? 1 : ((b.state > a.state) ? -1 : 0));
+                    return data;
+                    break;
+                default:
+                    return data;
+                    break;
+            }
+
+        }
     }
 
 
@@ -231,6 +248,7 @@ define([
             //console.log(data);
             let cellsCount = Object.keys(data).length;
             let squareSize = Math.ceil(Math.sqrt(cellsCount));
+            data = this.sortingMap(data);
             this.currentData = this.createPositionArray(data, cellsCount, squareSize);
             //console.log(this.currentData);
         },
@@ -294,6 +312,7 @@ define([
                 .call(d3.axisLeft(y).tickSize(0))
                 .select(".domain").remove()
 
+            //let data = this.sortingMap(this.currentData);
             let rects = this.svg.selectAll("#rectGroup").data(this.currentData, function(d) { return d.id; });
 
             let cells = rects.enter()
