@@ -35,6 +35,7 @@ define([
         this.defaultOptions = {
             padding: 0.1,
             sorting: "state",
+            mouseOverOpacity: 1,
             margin: {
                 left: 1,
                 right: 1,
