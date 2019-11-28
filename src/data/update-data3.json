@@ -1,6 +1,7 @@
 [
    {
       "state": 4,
+      "value": 10,
       "target-path": "base-target",
       "display-path": "base-path",
       "id" : 100,
@@ -9,6 +10,7 @@
    },
    {
       "state": 3,
+      "value": 6,
       "target-path": "base-target",
       "display-path": "base-path",
       "id" : 12,
@@ -17,6 +19,7 @@
    },
    {
       "state": 2,
+      "value": 6,
       "target-path": "base-target",
       "display-path": "base-path",
       "id" : 4,
@@ -25,6 +28,7 @@
    },
    {
       "state": 5,
+      "value": 16,
       "target-path": "base-target",
       "display-path": "base-path",
       "id" : 60,
@@ -33,6 +37,7 @@
    },
    {
       "state": 1,
+      "value": 12,
       "target-path": "base-target",
       "display-path": "base-path",
       "id" : 34,

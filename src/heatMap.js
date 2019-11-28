@@ -34,7 +34,7 @@ define([
 
         this.defaultOptions = {
             padding: 0.1,
-            sorting: "state",
+            sorting: "value",
             sortingType: "front",
             mouseOverOpacity: 1,
             margin: {
@@ -78,6 +78,7 @@ define([
                         y : y,
                         x : x,
                         id : +data[i]["id"],
+                        value : +data[i]["value"],
                         state : +data[i]["state"],
                         link : data[i]["linkto"],
                         // scaleX : scaleSquareX,
@@ -202,6 +203,45 @@ define([
                     });
                     return data;
                     break;
+                case "value":
+                    data.sort(function (a, b) { 
+                        if (a.value == 5)
+                            a.value = -1;
+                        if (b.value == 5)
+                            b.value = -1;
+                        if (type == "back"){
+                            if (a.value < b.value) {
+                                if (a.value == -1) a.value = 5;
+                                if (b.value == -1) b.value = 5;
+                                return 1;
+                            }
+                        } else {
+                            if (a.value > b.value) {
+                                if (a.value == -1) a.value = 5;
+                                if (b.value == -1) b.value = 5;
+                                return 1;
+                            }
+                        }
+                        if (type == "back"){
+                            if (b.value < a.value) {
+                                if (a.value == -1) a.value = 5;
+                                if (b.value == -1) b.value = 5;
+                                return -1;
+                            }
+                        } else {
+                            if (b.value > a.value) {
+                                if (a.value == -1) a.value = 5;
+                                if (b.value == -1) b.value = 5;
+                                return -1;
+                            }
+                        }
+                        if (a.value == -1) a.value = 5;
+                        if (b.value == -1) b.value = 5;
+                        return 0;
+                    });
+                    return data;
+                    break;
+
                 default:
                     return data;
                     break;
