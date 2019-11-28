@@ -35,6 +35,7 @@ define([
         this.defaultOptions = {
             padding: 0.1,
             sorting: "state",
+            sortingType: "front",
             mouseOverOpacity: 1,
             margin: {
                 left: 1,
@@ -157,6 +158,7 @@ define([
         }.bind(this);
 
         this.sortingMap = function (data) {
+            let type = this.currentOptions.sortingType;
             switch (this.currentOptions.sorting) {
                 case "none":
                     return data;
@@ -168,15 +170,31 @@ define([
                             a.state = -1;
                         if (b.state == 5)
                             b.state = -1;
-                        if (a.state > b.state) {
-                            if (a.state == -1) a.state = 5;
-                            if (b.state == -1) b.state = 5;
-                            return 1;
+                        if (type == "back"){
+                            if (a.state < b.state) {
+                                if (a.state == -1) a.state = 5;
+                                if (b.state == -1) b.state = 5;
+                                return 1;
+                            }
+                        } else {
+                            if (a.state > b.state) {
+                                if (a.state == -1) a.state = 5;
+                                if (b.state == -1) b.state = 5;
+                                return 1;
+                            }
                         }
-                        if (b.state > a.state) {
-                            if (a.state == -1) a.state = 5;
-                            if (b.state == -1) b.state = 5;
-                            return -1;
+                        if (type == "back"){
+                            if (b.state < a.state) {
+                                if (a.state == -1) a.state = 5;
+                                if (b.state == -1) b.state = 5;
+                                return -1;
+                            }
+                        } else {
+                            if (b.state > a.state) {
+                                if (a.state == -1) a.state = 5;
+                                if (b.state == -1) b.state = 5;
+                                return -1;
+                            }
                         }
                         if (a.state == -1) a.state = 5;
                         if (b.state == -1) b.state = 5;
