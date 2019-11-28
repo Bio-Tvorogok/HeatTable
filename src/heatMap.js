@@ -53,6 +53,7 @@ define([
                     [3, "red"],
                     [4, "crimson"],
                     [5, "gray"],
+                    [6, "burlywood"],
                     [7, "white"],
                     [8, "black"]
                 ])
@@ -61,49 +62,62 @@ define([
         // Init current options like default
         this.currentOptions = this.defaultOptions;
         // Init prev rect positions
-        this.prevPositionsByID = new Map();
+        //this.prevPositionsByID = new Map();
 
         this.createPositionArray = function(data, length, squareSize,
             scaleSquareX, scaleSquareY) {
-                this.prevPositionsByID = this.filterPrevArray(this.prevPositionsByID, data);
-                let tmpPositions = [...this.prevPositionsByID.values()];
+                // this.prevPositionsByID = this.filterPrevArray(this.prevPositionsByID, data);
+                // let tmpPositions = [...this.prevPositionsByID.values()];
                 let dataArr = new Array(length);
-                for (let i = 0; i < length; i++) {
-
-                    let prevItem = this.prevPositionsByID.get(+data[i]["id"]);
-                    if (prevItem !== undefined) {
-                        dataArr[i] = {
-                            y : (prevItem * i) % squareSize,
-                            x : (prevItem * i) % squareSize,
-                            id : +data[i]["id"],
-                            state : +data[i]["state"],
-                            link : data[i]["linkto"],
-                            scaleX : scaleSquareX,
-                            scaleY : scaleSquareY
-                        }
-                    } else {
-                        let x = 0;
-                        let y = 0;
-                        for (let posIter = 0; posIter < squareSize * squareSize; posIter++){
-                            x = Math.floor(posIter / squareSize);
-                            y = posIter % squareSize;
-                            let pos = x * squareSize + y;
-                            if (tmpPositions.find(item => item == pos) === undefined) {
-                                dataArr[i] = {
-                                    y : y,
-                                    x : x,
-                                    id : +data[i]["id"],
-                                    state : +data[i]["state"],
-                                    link : data[i]["linkto"],
-                                    scaleX : scaleSquareX,
-                                    scaleY : scaleSquareY
-                                }
-                                tmpPositions.push(pos);
-                                break;
-                            }
-                        }
+                for (let i = 0; i < length; i++){
+                    let x = Math.floor(i / squareSize);
+                    let y = i % squareSize; 
+                    dataArr[i] = {
+                        y : y,
+                        x : x,
+                        id : +data[i]["id"],
+                        state : +data[i]["state"],
+                        link : data[i]["linkto"],
+                        // scaleX : scaleSquareX,
+                        // scaleY : scaleSquareY
                     }
-            }
+                }
+                // for (let i = 0; i < length; i++) {
+
+                //     let prevItem = this.prevPositionsByID.get(+data[i]["id"]);
+                //     if (prevItem !== undefined) {
+                //         dataArr[i] = {
+                //             y : (prevItem * i) % squareSize,
+                //             x : (prevItem * i) % squareSize,
+                //             id : +data[i]["id"],
+                //             state : +data[i]["state"],
+                //             link : data[i]["linkto"],
+                //             scaleX : scaleSquareX,
+                //             scaleY : scaleSquareY
+                //         }
+                //     } else {
+                //         let x = 0;
+                //         let y = 0;
+                //         for (let posIter = 0; posIter < squareSize * squareSize; posIter++){
+                //             x = Math.floor(posIter / squareSize);
+                //             y = posIter % squareSize;
+                //             let pos = x * squareSize + y;
+                //             if (tmpPositions.find(item => item == pos) === undefined) {
+                //                 dataArr[i] = {
+                //                     y : y,
+                //                     x : x,
+                //                     id : +data[i]["id"],
+                //                     state : +data[i]["state"],
+                //                     link : data[i]["linkto"],
+                //                     scaleX : scaleSquareX,
+                //                     scaleY : scaleSquareY
+                //                 }
+                //                 tmpPositions.push(pos);
+                //                 break;
+                //             }
+                //         }
+                //     }
+                // }
             return dataArr;
         }
 
@@ -147,7 +161,26 @@ define([
                     return data;
                     break;
                 case "state":
-                    data.sort((a, b) => (a.state > b.state) ? 1 : ((b.state > a.state) ? -1 : 0));
+                    //data.sort((a, b) => (a.state > b.state) ? 1 : ((b.state > a.state) ? -1 : 0));
+                    data.sort(function (a, b) { 
+                        if (a.state == 5)
+                            a.state = -1;
+                        if (b.state == 5)
+                            b.state = -1;
+                        if (a.state > b.state) {
+                            if (a.state == -1) a.state = 5;
+                            if (b.state == -1) b.state = 5;
+                            return 1;
+                        }
+                        if (b.state > a.state) {
+                            if (a.state == -1) a.state = 5;
+                            if (b.state == -1) b.state = 5;
+                            return -1;
+                        }
+                        if (a.state == -1) a.state = 5;
+                        if (b.state == -1) b.state = 5;
+                        return 0;
+                    });
                     return data;
                     break;
                 default:
@@ -363,29 +396,29 @@ define([
                 .exit()
                 .remove();
 
-            let dataTmp = this.currentData;
+            let dataTmp = new Array();
             d3.select('#dataviz').selectAll('#rectGroup').select('rect')
                 .transition()
                 .duration(600)
                 .attr("width",  x.bandwidth() )
                 .attr("height", y.bandwidth() )
-                .style("fill", function(d) { return color(d.state)} )
-                .on('start', function() {
-                    let lables = d3.select('#dataviz').selectAll('#textData')
-                        .data(dataTmp);
-
-                        lables
-                        .transition()
-                        .duration(600)
-                        .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2; })
-                        .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2; })
-                        .attr("opacity", 1)
-                        .style("font-size", function(d) { return 1 / squareSize * 100 + "px" });
-                })
+                .style("fill", function(d) { dataTmp.push({x: d.x, y: d.y}); return color(d.state)} )
                 .attr("x", function(d) { return x(d.x) })
                 .attr("y", function(d) { return y(d.y) });
 
-            this.setPositionsMap(this.currentData, squareSize);
+
+            let lables = d3.select('#dataviz').selectAll('#textData')
+                .data(dataTmp);
+        //console.log(dataTmp);
+            lables
+                .transition()
+                .duration(600)
+                .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2; })
+                .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2; })
+                .attr("opacity", 1)
+                .style("font-size", function(d) { return 1 / squareSize * 100 + "px" });
+
+            //this.setPositionsMap(this.currentData, squareSize);
         },
 
         getDataFormat: function(contId) {

@@ -19,7 +19,7 @@ function   ($, HeatMap) {
     });
 });
 
-const jsonData = ["data/update-data.json", "data/update-data2.json", "data/update-data3.json", "data/update-data4.json"];
+const jsonData = ["data/update-data.json", "data/update-data2.json", "data/update-data3.json", "data/update-data4.json", "data/update-data5.json"];
 
 async function loop(HeatMap, $, settings) {
     let i = 0;
@@ -33,14 +33,14 @@ async function loop(HeatMap, $, settings) {
         await sleep(2000)
         console.log("update with - " + i);
         updateMap(jsonData[i], map, $);
-        i = (i + 1) % 4;
+        i = (i + 1) % 5;
     }
     map.setStyles(settings[1]);
     for (let j = 0; j < 4; j++) {
         await sleep(2000)
         console.log("update with - " + i);
         updateMap(jsonData[i], map, $);
-        i = (i + 1) % 4;
+        i = (i + 1) % 5;
     }
     map.setStyles(settings[2]);
     //map.unInitCtrl(undefined);
@@ -48,7 +48,7 @@ async function loop(HeatMap, $, settings) {
       await sleep(2000)
       console.log("update with - " + i);
       updateMap(jsonData[i], map, $);
-      i = (i + 1) % 4;
+      i = (i + 1) % 5;
     }
 }
 

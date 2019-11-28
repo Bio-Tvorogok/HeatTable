@@ -1,0 +1,202 @@
+[
+   {
+      "state": 2,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 100,
+      "text" : "text",
+      "linkto" : "https://mail.ru/"
+   },
+   {
+      "state": 5,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 12,
+      "text" : "text",
+      "linkto" : "https://stackoverflow.com/questions/34920956/make-text-a-link-in-svg/43455041"
+   },
+   {
+      "state": 2,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 3,
+      "text" : "text",
+      "linkto" : "http://bl.ocks.org/aditeyapandey/f10befa4d9e756460cd3"
+   },
+   {
+      "state": 5,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 400000000000000000,
+      "text" : "text",
+      "linkto" : "https://habr.com/ru/post/273471/"
+   },
+   {
+      "state": 6,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 5,
+      "text" : "text",
+      "linkto" : "https://blog.risingstack.com/d3-js-tutorial-bar-charts-with-javascript/"
+   },
+   {
+      "state": 1,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 6,
+      "text" : "text",
+      "linkto" : "https://mail.ru/"
+   },
+   {
+      "state": 3,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 7,
+      "text" : "text",
+      "linkto" : "https://stackoverflow.com/questions/34920956/make-text-a-link-in-svg/43455041"
+   },
+   {
+      "state": 2,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 8,
+      "text" : "text",
+      "linkto" : "http://bl.ocks.org/aditeyapandey/f10befa4d9e756460cd3"
+   },
+   {
+      "state": 5,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 9,
+      "text" : "text",
+      "linkto" : "https://habr.com/ru/post/273471/"
+   },
+   {
+      "state": 1,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 10,
+      "text" : "text",
+      "linkto" : "https://blog.risingstack.com/d3-js-tutorial-bar-charts-with-javascript/"
+   },
+   {
+      "state": 4,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 11,
+      "text" : "text",
+      "linkto" : "https://mail.ru/"
+   },
+   {
+      "state": 3,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 12,
+      "text" : "text",
+      "linkto" : "https://stackoverflow.com/questions/34920956/make-text-a-link-in-svg/43455041"
+   },
+   {
+      "state": 2,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 13,
+      "text" : "text",
+      "linkto" : "http://bl.ocks.org/aditeyapandey/f10befa4d9e756460cd3"
+   },
+   {
+      "state": 5,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 14,
+      "text" : "text",
+      "linkto" : "https://habr.com/ru/post/273471/"
+   },
+   {
+      "state": 1,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 15,
+      "text" : "text",
+      "linkto" : "https://blog.risingstack.com/d3-js-tutorial-bar-charts-with-javascript/"
+   },
+   {
+      "state": 4,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 16,
+      "text" : "text",
+      "linkto" : "https://mail.ru/"
+   },
+   {
+      "state": 3,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 17,
+      "text" : "text",
+      "linkto" : "https://stackoverflow.com/questions/34920956/make-text-a-link-in-svg/43455041"
+   },
+   {
+      "state": 2,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 18,
+      "text" : "text",
+      "linkto" : "http://bl.ocks.org/aditeyapandey/f10befa4d9e756460cd3"
+   },
+   {
+      "state": 5,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 19,
+      "text" : "text",
+      "linkto" : "https://habr.com/ru/post/273471/"
+   },
+   {
+      "state": 1,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 20,
+      "text" : "text",
+      "linkto" : "https://blog.risingstack.com/d3-js-tutorial-bar-charts-with-javascript/"
+   },
+   {
+      "state": 4,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 21,
+      "text" : "text",
+      "linkto" : "https://mail.ru/"
+   },
+   {
+      "state": 3,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 22,
+      "text" : "text",
+      "linkto" : "https://stackoverflow.com/questions/34920956/make-text-a-link-in-svg/43455041"
+   },
+   {
+      "state": 2,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 23,
+      "text" : "text",
+      "linkto" : "http://bl.ocks.org/aditeyapandey/f10befa4d9e756460cd3"
+   },
+   {
+      "state": 5,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 24,
+      "text" : "text",
+      "linkto" : "https://habr.com/ru/post/273471/"
+   },
+   {
+      "state": 1,
+      "target-path": "base-target",
+      "display-path": "base-path",
+      "id" : 25,
+      "text" : "text",
+      "linkto" : "https://blog.risingstack.com/d3-js-tutorial-bar-charts-with-javascript/"
+   }
+]
