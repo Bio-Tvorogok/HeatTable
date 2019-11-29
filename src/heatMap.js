@@ -34,7 +34,7 @@ define([
 
         this.defaultOptions = {
             padding: 0.1,
-            sorting: "value",
+            sorting: "state",
             sortingType: "front",
             mouseOverOpacity: 1,
             margin: {
@@ -63,13 +63,9 @@ define([
 
         // Init current options like default
         this.currentOptions = this.defaultOptions;
-        // Init prev rect positions
-        //this.prevPositionsByID = new Map();
 
         this.createPositionArray = function(data, length, squareSize,
             scaleSquareX, scaleSquareY) {
-                // this.prevPositionsByID = this.filterPrevArray(this.prevPositionsByID, data);
-                // let tmpPositions = [...this.prevPositionsByID.values()];
                 let dataArr = new Array(length);
                 for (let i = 0; i < length; i++){
                     let x = Math.floor(i / squareSize);
@@ -81,46 +77,8 @@ define([
                         value : +data[i]["value"],
                         state : +data[i]["state"],
                         link : data[i]["linkto"],
-                        // scaleX : scaleSquareX,
-                        // scaleY : scaleSquareY
                     }
                 }
-                // for (let i = 0; i < length; i++) {
-
-                //     let prevItem = this.prevPositionsByID.get(+data[i]["id"]);
-                //     if (prevItem !== undefined) {
-                //         dataArr[i] = {
-                //             y : (prevItem * i) % squareSize,
-                //             x : (prevItem * i) % squareSize,
-                //             id : +data[i]["id"],
-                //             state : +data[i]["state"],
-                //             link : data[i]["linkto"],
-                //             scaleX : scaleSquareX,
-                //             scaleY : scaleSquareY
-                //         }
-                //     } else {
-                //         let x = 0;
-                //         let y = 0;
-                //         for (let posIter = 0; posIter < squareSize * squareSize; posIter++){
-                //             x = Math.floor(posIter / squareSize);
-                //             y = posIter % squareSize;
-                //             let pos = x * squareSize + y;
-                //             if (tmpPositions.find(item => item == pos) === undefined) {
-                //                 dataArr[i] = {
-                //                     y : y,
-                //                     x : x,
-                //                     id : +data[i]["id"],
-                //                     state : +data[i]["state"],
-                //                     link : data[i]["linkto"],
-                //                     scaleX : scaleSquareX,
-                //                     scaleY : scaleSquareY
-                //                 }
-                //                 tmpPositions.push(pos);
-                //                 break;
-                //             }
-                //         }
-                //     }
-                // }
             return dataArr;
         }
 
@@ -299,7 +257,7 @@ define([
             };
 
             this.mousemove = function(d){
-                tooltipCurrent.html("The exact value of<br>this cell is: " + d.state)
+                tooltipCurrent.html("The exact value of<br>this cell is: " + d.value)
                 .style("left", (d3.mouse(this)[0]+70) + "px")
                 .style("top", (d3.mouse(this)[1]) + "px")
                 //.style("font-size", "20px")
