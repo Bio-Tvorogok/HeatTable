@@ -34,7 +34,7 @@ define([
 
         this.defaultOptions = {
             padding: 0.1,
-            sorting: "state",
+            sorting: "value",
             sortingType: "front",
             mouseOverOpacity: 1,
             margin: {
@@ -116,8 +116,20 @@ define([
             }
         }.bind(this);
 
+        this.simpleSort = function(a, b, isBack) {
+            if (isBack){
+                if (a < b) return 1;
+                if (b < a) return -1;
+            } else {
+                if (a > b) return 1;
+                if (b > a) return -1;
+            } 
+            return 0;
+        };
+
         this.sortingMap = function (data) {
             let type = this.currentOptions.sortingType;
+            let simpleSort = this.simpleSort;
             switch (this.currentOptions.sorting) {
                 case "none":
                     return data;
@@ -125,77 +137,29 @@ define([
                 case "state":
                     //data.sort((a, b) => (a.state > b.state) ? 1 : ((b.state > a.state) ? -1 : 0));
                     data.sort(function (a, b) { 
-                        if (a.state == 5)
-                            a.state = -1;
-                        if (b.state == 5)
-                            b.state = -1;
-                        if (type == "back"){
-                            if (a.state < b.state) {
-                                if (a.state == -1) a.state = 5;
-                                if (b.state == -1) b.state = 5;
-                                return 1;
-                            }
-                        } else {
-                            if (a.state > b.state) {
-                                if (a.state == -1) a.state = 5;
-                                if (b.state == -1) b.state = 5;
-                                return 1;
-                            }
-                        }
-                        if (type == "back"){
-                            if (b.state < a.state) {
-                                if (a.state == -1) a.state = 5;
-                                if (b.state == -1) b.state = 5;
-                                return -1;
-                            }
-                        } else {
-                            if (b.state > a.state) {
-                                if (a.state == -1) a.state = 5;
-                                if (b.state == -1) b.state = 5;
-                                return -1;
-                            }
-                        }
+                        if (a.state == 5) a.state = -1;
+                        if (b.state == 5) b.state = -1;
+                        let res;
+
+                        if (type == "back")
+                            res = simpleSort(a.state, b.state, true);
+                        else
+                            res = simpleSort(a.state, b.state, false);
+
                         if (a.state == -1) a.state = 5;
                         if (b.state == -1) b.state = 5;
-                        return 0;
+                        return res;
                     });
                     return data;
                     break;
                 case "value":
                     data.sort(function (a, b) { 
-                        if (a.value == 5)
-                            a.value = -1;
-                        if (b.value == 5)
-                            b.value = -1;
-                        if (type == "back"){
-                            if (a.value < b.value) {
-                                if (a.value == -1) a.value = 5;
-                                if (b.value == -1) b.value = 5;
-                                return 1;
-                            }
-                        } else {
-                            if (a.value > b.value) {
-                                if (a.value == -1) a.value = 5;
-                                if (b.value == -1) b.value = 5;
-                                return 1;
-                            }
-                        }
-                        if (type == "back"){
-                            if (b.value < a.value) {
-                                if (a.value == -1) a.value = 5;
-                                if (b.value == -1) b.value = 5;
-                                return -1;
-                            }
-                        } else {
-                            if (b.value > a.value) {
-                                if (a.value == -1) a.value = 5;
-                                if (b.value == -1) b.value = 5;
-                                return -1;
-                            }
-                        }
-                        if (a.value == -1) a.value = 5;
-                        if (b.value == -1) b.value = 5;
-                        return 0;
+                        let res;
+                        if (type == "back")
+                            res = simpleSort(a.value, b.value, true);
+                        else 
+                            res = simpleSort(a.value, b.value, false);
+                        return res;
                     });
                     return data;
                     break;
