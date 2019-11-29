@@ -2,7 +2,7 @@
    {
       "state": 2,
       "value": 10,
-      "target-path": "base-target",
+      "target-path": "/kek/p1/db",
       "display-path": "base-path",
       "id" : 100000000000,
       "text" : "text",
@@ -11,7 +11,7 @@
    {
       "state": 5,
       "value": 23,
-      "target-path": "base-target",
+      "target-path": "/panels/p2/db1",
       "display-path": "base-path",
       "id" : 10001243240000012000,
       "text" : "text",
@@ -20,7 +20,7 @@
    {
       "state": 2,
       "value": 7,
-      "target-path": "base-target",
+      "target-path": "/panels/p3/db2",
       "display-path": "base-path",
       "id" : 45,
       "text" : "text",
@@ -29,7 +29,7 @@
    {
       "state": 1,
       "value": 9,
-      "target-path": "base-target",
+      "target-path": "/panels/p2/db3",
       "display-path": "base-path",
       "id" : 57,
       "text" : "text",
@@ -38,7 +38,16 @@
    {
       "state": 2,
       "value": 7,
-      "target-path": "base-target",
+      "target-path": "/kek/p2/db",
+      "display-path": "base-path",
+      "id" : 34,
+      "text" : "text",
+      "linkto" : "https://blog.risingstack.com/d3-js-tutorial-bar-charts-with-javascript/"
+   },
+   {
+      "state": 2,
+      "value": 7,
+      "target-path": "/panels/p2/db4",
       "display-path": "base-path",
       "id" : 34,
       "text" : "text",

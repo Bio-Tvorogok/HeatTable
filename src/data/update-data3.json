@@ -2,7 +2,7 @@
    {
       "state": 4,
       "value": 10,
-      "target-path": "base-target",
+      "target-path": "/kek/p1/db",
       "display-path": "base-path",
       "id" : 100,
       "text" : "text",
@@ -11,7 +11,7 @@
    {
       "state": 3,
       "value": 6,
-      "target-path": "base-target",
+      "target-path": "/kek/p1/db",
       "display-path": "base-path",
       "id" : 12,
       "text" : "text",
@@ -20,7 +20,7 @@
    {
       "state": 2,
       "value": 6,
-      "target-path": "base-target",
+      "target-path": "/kek/p1/db",
       "display-path": "base-path",
       "id" : 4,
       "text" : "text",
@@ -29,7 +29,7 @@
    {
       "state": 5,
       "value": 16,
-      "target-path": "base-target",
+      "target-path": "/kek/p1/db",
       "display-path": "base-path",
       "id" : 60,
       "text" : "text",
@@ -38,7 +38,7 @@
    {
       "state": 1,
       "value": 12,
-      "target-path": "base-target",
+      "target-path": "/kek/p1/db",
       "display-path": "base-path",
       "id" : 34,
       "text" : "text",

@@ -34,8 +34,9 @@ define([
 
         this.defaultOptions = {
             padding: 0.1,
-            sorting: "value",
+            sorting: "state",
             sortingType: "front",
+            orientation: "top-left-h",
             mouseOverOpacity: 1,
             margin: {
                 left: 1,
@@ -68,15 +69,38 @@ define([
             scaleSquareX, scaleSquareY) {
                 let dataArr = new Array(length);
                 for (let i = 0; i < length; i++){
-                    let x = Math.floor(i / squareSize);
-                    let y = i % squareSize; 
+                    let y;
+                    let x;
+
+                    switch(this.currentOptions.orientation){
+                        case "bottom-left-v":
+                            x = Math.floor(i / squareSize);
+                            y = i % squareSize;
+                            break;
+                        case "bottom-left-h":
+                            x = i % squareSize;
+                            y = Math.floor(i / squareSize);
+                            break;
+                        case "top-left-h":
+                            y = Math.floor(i / squareSize);
+                            y = squareSize - y - 1;
+                            x = i % squareSize;
+                            break;
+                        case "bottom-right-h":
+                            x = i % squareSize;
+                            x = squareSize - x - 1;
+                            y = Math.floor(i / squareSize);
+                            break;
+
+                    }
                     dataArr[i] = {
-                        y : y,
-                        x : x,
+                        x: x,
+                        y: y,
                         id : +data[i]["id"],
                         value : +data[i]["value"],
                         state : +data[i]["state"],
                         link : data[i]["linkto"],
+                        target : data[i]["target-path"]
                     }
                 }
             return dataArr;
@@ -116,6 +140,45 @@ define([
             }
         }.bind(this);
 
+        this.targetParse = function(targets) {
+
+            let splitedTargets = new Array();
+            for (let i = 0; i < targets.length; i++) {
+                let tmp = targets[i].split('/');
+                tmp.splice(0, 1);
+                splitedTargets.push(tmp);
+            };
+            
+            let depthMultiplier = 1;
+            let maxDepth = Math.max.apply(Math, $.map(splitedTargets, function (el) { return el.length }));
+            //let maxDepth = Math.max.apply(Math, Array.from(splitedTargets).map(([key, value]) => key.length));
+
+            ///let currentWeight = 
+            let resultSort = new Array(splitedTargets.length).fill(0);
+            for (let i = 0; i < maxDepth; i++) {
+                let targetsWeight = new Map();
+                let currentWeight = 0;
+                for (let j = 0; j < splitedTargets.length; j++){
+                    if (splitedTargets[i].length > i) {
+                        // console.log(splitedTargets[j][i]);
+                        if (targetsWeight.has(splitedTargets[j][i])) {
+                            resultSort[j] += targetsWeight.get(splitedTargets[j][i]) * depthMultiplier;
+                        } else {
+                            targetsWeight.set(splitedTargets[j][i], currentWeight);
+                            resultSort[j] += currentWeight * depthMultiplier;
+                            currentWeight++;
+                        }
+                    }
+                }
+                depthMultiplier *= 0.1;
+            }
+
+
+            // console.log(resultSort);
+            // console.log(splitedTargets);
+            return resultSort;
+        }
+
         this.simpleSort = function(a, b, isBack) {
             if (isBack){
                 if (a < b) return 1;
@@ -130,12 +193,12 @@ define([
         this.sortingMap = function (data) {
             let type = this.currentOptions.sortingType;
             let simpleSort = this.simpleSort;
+            let targetParse = this.targetParse;
             switch (this.currentOptions.sorting) {
                 case "none":
                     return data;
                     break;
                 case "state":
-                    //data.sort((a, b) => (a.state > b.state) ? 1 : ((b.state > a.state) ? -1 : 0));
                     data.sort(function (a, b) { 
                         if (a.state == 5) a.state = -1;
                         if (b.state == 5) b.state = -1;
@@ -163,7 +226,23 @@ define([
                     });
                     return data;
                     break;
-
+                case "target":
+                    let targets = data.map(a => a["target-path"]);
+                    let sortWeight = targetParse(targets);
+                    for (let i = 0; i < data.length; i++){
+                        data[i].weight = sortWeight[i];
+                    }
+                    data.sort(function (a, b) {
+                        let res;
+                        if (type == "back")
+                            res = simpleSort(a.weight, b.weight, true);
+                        else
+                            res = simpleSort(a.weight, b.weight, false);
+                        return res;
+                    })
+                    console.log(data);
+                    return data;
+                    break;
                 default:
                     return data;
                     break;
