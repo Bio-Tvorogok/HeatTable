@@ -19,7 +19,7 @@ function   ($, HeatMap) {
     });
 });
 
-const jsonData = ["data/update-data.json", "data/update-data2.json", "data/update-data3.json", "data/update-data4.json", "data/update-data5.json"];
+const jsonData = ["data/update-data.json", "data/update-data2.json", "data/update-data3.json", "data/update-data4.json", "data/update-data5.json", "data/update-data-test.json", "data/update-data-test2.json"];
 
 async function loop(HeatMap, $, settings) {
     let i = 0;
@@ -29,6 +29,15 @@ async function loop(HeatMap, $, settings) {
     map.initCtrl("dataviz", undefined, undefined);
     map.setStyles(settings[0]);
     //updateMap(jsonData[4], map, $);
+
+    // updateMap(jsonData[5], map, $);
+    // await sleep(2000);
+    // updateMap(jsonData[5], map, $);
+    // await sleep(2000);
+    // updateMap(jsonData[6], map, $);
+    // await sleep(2000)
+    // updateMap(jsonData[6], map, $);
+
     for (let j = 0; j < 4; j++) {
         await sleep(2000)
         console.log("update with - " + i);

@@ -34,10 +34,13 @@ define([
 
         this.defaultOptions = {
             padding: 0.1,
+            textPosition: "r-c",
             sorting: "state",
             sortingType: "front",
             orientation: "top-left-h",
             mouseOverOpacity: 1,
+            rx: 15,
+            ry: 15,
             margin: {
                 left: 1,
                 right: 1,
@@ -151,16 +154,13 @@ define([
             
             let depthMultiplier = 1;
             let maxDepth = Math.max.apply(Math, $.map(splitedTargets, function (el) { return el.length }));
-            //let maxDepth = Math.max.apply(Math, Array.from(splitedTargets).map(([key, value]) => key.length));
 
-            ///let currentWeight = 
             let resultSort = new Array(splitedTargets.length).fill(0);
             for (let i = 0; i < maxDepth; i++) {
                 let targetsWeight = new Map();
                 let currentWeight = 0;
                 for (let j = 0; j < splitedTargets.length; j++){
                     if (splitedTargets[i].length > i) {
-                        // console.log(splitedTargets[j][i]);
                         if (targetsWeight.has(splitedTargets[j][i])) {
                             resultSort[j] += targetsWeight.get(splitedTargets[j][i]) * depthMultiplier;
                         } else {
@@ -172,10 +172,6 @@ define([
                 }
                 depthMultiplier *= 0.1;
             }
-
-
-            // console.log(resultSort);
-            // console.log(splitedTargets);
             return resultSort;
         }
 
@@ -249,6 +245,35 @@ define([
             }
 
         }
+
+        this.calculateTextPos = function(xRect, yRect, textLength, textSize) {
+            let x, y;
+            
+            console.log("length - " + textLength);
+            console.log("size - " + textSize);
+            // let currentRelativeRatio = textLength / textSize;
+            // let sizeFactor = 0;
+            // // textLength = textLength * sizeFactor;
+            // if (currentRelativeRatio !== this.relativeRatio){
+            //     //sizeFactor = te
+            //     console.log("baad - ", currentRelativeRatio + " - " + this.relativeRatio);
+            // }
+            switch (this.currentOptions.textPosition) {
+                case "r-c":
+                    x = xRect - textLength / 2;
+                    y = yRect / 2;
+                    break;
+                default:
+                    x = xRect / 2;
+                    y = yRect / 2;
+                    break;
+            };
+            return {x, y};
+        }.bind(this);
+
+        // this.setRelativeRatio = function(ratio){
+        //     this.relativeRatio = ratio;
+        // }.bind(this);
     }
 
 
@@ -370,8 +395,10 @@ define([
             let vars = Array.from(Array(squareSize).keys());
 
             //TODO change function declaration
+            let newSize = 1 / squareSize * 100;
             let width = this.width;
             let padding = this.currentOptions.padding;
+            //let setRatio = this.setRelativeRatio;
             let wrap = function () {
                 var self = d3.select(this),
                 textLength = self.node().getComputedTextLength(),
@@ -382,6 +409,8 @@ define([
                     self.text(text + '...');
                     textLength = self.node().getComputedTextLength();
                 }
+                //setRatio(textLength / newSize);
+                //console.log("relative - " + relativeRatio);
             }
 
             let x = d3.scaleBand()
@@ -423,8 +452,8 @@ define([
             lincksRect
                 .append('rect')
                 .attr("class", this.rectStyles)
-                .attr("rx", 15)
-                .attr("ry", 15)
+                .attr("rx", this.currentOptions.rx)
+                .attr("ry", this.currentOptions.ry)
                 .attr("id", function(d) {return d.id})
                 .attr("width", 0 )
                 .attr("height", 0 )
@@ -440,17 +469,25 @@ define([
                             .attr("y", function(d) { return y(d.y) });
 
 
+            
+            //let newPos = this.calculateTextPos(x.bandwidth(), y.bandwidth());
             lincksRect
                 .append("text")
                 .attr("class", this.textStyles)
                 .attr("dy", ".30em")
                 .attr("id", "textData")
-                .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2 })
-                .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2 })
                 .attr("opacity", 0)
+                .style("font-size", function(d) { return newSize + "px" })
                     .append('tspan').text(function(d) { return d.id; }).each(wrap);
 
+            let textClalculate = this.calculateTextPos;
 
+            lincksRect
+                .select("#textData")
+                .attr("x", function(d) { return x(d.x) + textClalculate(x.bandwidth(), y.bandwidth(),
+                    d3.select(this).node().getComputedTextLength(), newSize).x; })
+                .attr("y", function(d) { return y(d.y) + textClalculate(x.bandwidth(), y.bandwidth(),
+                    d3.select(this).node().getComputedTextLength(), newSize).y; })
 
             rects
                 .exit()
@@ -469,16 +506,20 @@ define([
 
             let lables = d3.select('#dataviz').selectAll('#textData')
                 .data(dataTmp);
-        //console.log(dataTmp);
+
+            lables
+            .style("font-size", function(d) { return newSize + "px" });
+
             lables
                 .transition()
                 .duration(600)
-                .attr("x", function(d) { return x(d.x) + x.bandwidth() / 2; })
-                .attr("y", function(d) { return y(d.y) + y.bandwidth() / 2; })
+                .attr("x", function(d) { return x(d.x) + textClalculate(x.bandwidth(), y.bandwidth(),
+                    d3.select(this).node().getComputedTextLength(), newSize).x; })
+                .attr("y", function(d) { return y(d.y) + textClalculate(x.bandwidth(), y.bandwidth(),
+                    d3.select(this).node().getComputedTextLength(), newSize).y; })
                 .attr("opacity", 1)
-                .style("font-size", function(d) { return 1 / squareSize * 100 + "px" });
+                //.style("font-size", function(d) { return newSize + "px" });
 
-            //this.setPositionsMap(this.currentData, squareSize);
         },
 
         getDataFormat: function(contId) {
