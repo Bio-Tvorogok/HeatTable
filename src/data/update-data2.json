@@ -9,7 +9,7 @@
       "linkto" : "https://mail.ru/"
    },
    {
-      "state": 5,
+      "state": 2,
       "value": 2,
       "target-path": "/kek/p1/db",
       "display-path": "base-path",

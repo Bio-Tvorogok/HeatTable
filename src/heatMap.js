@@ -34,11 +34,13 @@ define([
 
         this.defaultOptions = {
             padding: 0.1,
-            textPosition: "b-c",
+            textPosition: "t-c",
             sorting: "state",
             sortingType: "front",
             orientation: "top-left-h",
+            animationType: "corner",
             mouseOverOpacity: 1,
+            animationTime: 1600,
             rx: 15,
             ry: 15,
             margin: {
@@ -249,6 +251,10 @@ define([
         this.calculateTextPos = function(xRect, yRect, textSize) {
             let x, y;
             switch (this.currentOptions.textPosition) {
+                case "c":
+                    x = xRect / 2;
+                    y = yRect / 2;
+                    break;
                 case "r-c":
                     x = xRect - textSize.width / 2;
                     y = yRect / 2;
@@ -271,6 +277,87 @@ define([
                     break;
             };
             return {x, y};
+        }.bind(this);
+
+        this.animateObjects = function(x, y, color, textSize) {
+            let textCalculate = this.calculateTextPos;
+            let animationTime = this.currentOptions.animationTime;
+            let dataTmp = new Array();
+            switch (this.currentOptions.animationType){
+                case "none": {
+                    d3.select('#dataviz').selectAll('#rectGroup').select('rect')
+                        .attr("width",  x.bandwidth() )
+                        .attr("height", y.bandwidth() )
+                        .style("fill", function(d) { dataTmp.push({x: d.x, y: d.y}); return color(d.state)} )
+                        .attr("x", function(d) { return x(d.x) })
+                        .attr("y", function(d) { return y(d.y) });
+
+                    let lables = d3.select('#dataviz').selectAll('#textData')
+                        .data(dataTmp);
+                    // TODO try back animation
+                    lables
+                        .style("font-size", function(d) { return textSize + "px" });
+                    lables
+                        .attr("x", function(d) { return x(d.x) + textCalculate(x.bandwidth(), y.bandwidth(),
+                            d3.select(this).node().getBBox()).x; })
+                        .attr("y", function(d) { return y(d.y) + textCalculate(x.bandwidth(), y.bandwidth(),
+                            d3.select(this).node().getBBox()).y; })
+                        .attr("opacity", 1);
+                    break;
+                }
+                case "center": {
+                    d3.select('#dataviz').selectAll('#rectGroup').select('rect')
+                        .transition()
+                        .duration(animationTime)
+                        .attr("width",  x.bandwidth() )
+                        .attr("height", y.bandwidth() )
+                        .style("fill", function(d) { dataTmp.push({x: d.x, y: d.y}); return color(d.state)} )
+                        .attr("x", function(d) { return x(d.x) })
+                        .attr("y", function(d) { return y(d.y) });
+
+
+                    let lables = d3.select('#dataviz').selectAll('#textData')
+                        .data(dataTmp);
+                    // TODO try back animation
+                    lables
+                        .style("font-size", function(d) { return textSize + "px" });
+                    lables
+                        .transition()
+                        .duration(animationTime)
+                        .attr("x", function(d) { return x(d.x) + textCalculate(x.bandwidth(), y.bandwidth(),
+                            d3.select(this).node().getBBox()).x; })
+                        .attr("y", function(d) { return y(d.y) + textCalculate(x.bandwidth(), y.bandwidth(),
+                            d3.select(this).node().getBBox()).y; })
+                        .attr("opacity", 1);
+                    break;
+                }
+                default: {
+                    d3.select('#dataviz').selectAll('#rectGroup').select('rect')
+                        .transition()
+                        .duration(animationTime)
+                        .attr("width",  x.bandwidth() )
+                        .attr("height", y.bandwidth() )
+                        .style("fill", function(d) { dataTmp.push({x: d.x, y: d.y}); return color(d.state)} )
+                        .attr("x", function(d) { return x(d.x) })
+                        .attr("y", function(d) { return y(d.y) });
+
+
+                    let lables = d3.select('#dataviz').selectAll('#textData')
+                        .data(dataTmp);
+                    // TODO try back animation
+                    lables
+                        .style("font-size", function(d) { return textSize + "px" });
+                    lables
+                        .transition()
+                        .duration(animationTime)
+                        .attr("x", function(d) { return x(d.x) + textCalculate(x.bandwidth(), y.bandwidth(),
+                            d3.select(this).node().getBBox()).x; })
+                        .attr("y", function(d) { return y(d.y) + textCalculate(x.bandwidth(), y.bandwidth(),
+                            d3.select(this).node().getBBox()).y; })
+                        .attr("opacity", 1);
+                    break;
+                }
+            }
         }.bind(this);
     }
 
@@ -430,7 +517,7 @@ define([
                 .call(d3.axisLeft(y).tickSize(0))
                 .select(".domain").remove()
 
-            //let data = this.sortingMap(this.currentData);
+            // Init Elementss ------------------------------
             let rects = this.svg.selectAll("#rectGroup").data(this.currentData, function(d) { return d.id; });
 
             let cells = rects.enter()
@@ -445,24 +532,44 @@ define([
                 .attr("target", "_blank");
 
 
-            lincksRect
-                .append('rect')
-                .attr("class", this.rectStyles)
-                .attr("rx", this.currentOptions.rx)
-                .attr("ry", this.currentOptions.ry)
-                .attr("id", function(d) {return d.id})
-                .attr("width", 0 )
-                .attr("height", 0 )
-                .attr("x", function(d) { return x(d.x) })
-                .attr("y", function(d) { return y(d.y) })
-                    .style("fill", function(d) { return color(d.state)} )
-                        .on("mouseover", this.mouseover)
-                        .on("mousemove", this.mousemove)
-                        .on("mouseleave", this.mouseleave)
-                            .transition()
-                            .duration(600)
-                            .attr("x", function(d) { return x(d.x) })
-                            .attr("y", function(d) { return y(d.y) });
+            let spawnShiftX = 0;
+            let spawnShiftY = 0;
+
+            if (this.currentOptions.animationType == "center") {
+                spawnShiftX = x.bandwidth() / 2;
+                spawnShiftY = y.bandwidth() / 2;
+            }
+            if (this.currentOptions.animationType == "corner"){
+                lincksRect
+                    .append('rect')
+                    .attr("class", this.rectStyles)
+                    .attr("rx", this.currentOptions.rx)
+                    .attr("ry", this.currentOptions.ry)
+                    .attr("id", function(d) {return d.id})
+                    .attr("width", 0 )
+                    .attr("height", 0 )
+                    .attr("x", function(d) { return 0; })
+                    .attr("y", function(d) { return 0; })
+                        .style("fill", function(d) { return color(d.state)} )
+                            .on("mouseover", this.mouseover)
+                            .on("mousemove", this.mousemove)
+                            .on("mouseleave", this.mouseleave);
+            } else {
+                lincksRect
+                    .append('rect')
+                    .attr("class", this.rectStyles)
+                    .attr("rx", this.currentOptions.rx)
+                    .attr("ry", this.currentOptions.ry)
+                    .attr("id", function(d) {return d.id})
+                    .attr("width", 0 )
+                    .attr("height", 0 )
+                    .attr("x", function(d) { return x(d.x) + spawnShiftX; })
+                    .attr("y", function(d) { return y(d.y) + spawnShiftY; })
+                        .style("fill", function(d) { return color(d.state)} )
+                            .on("mouseover", this.mouseover)
+                            .on("mousemove", this.mousemove)
+                            .on("mouseleave", this.mouseleave);
+            }
 
 
             lincksRect
@@ -474,43 +581,28 @@ define([
                 .style("font-size", function(d) { return newSize + "px" })
                     .append('tspan').text(function(d) { return d.id; }).each(wrap);
 
-            let textClalculate = this.calculateTextPos;
+            let textCalculate = this.calculateTextPos;
 
-            lincksRect
-                .select("#textData")
-                .attr("x", function(d) { return x(d.x) + textClalculate(x.bandwidth(), y.bandwidth(),
-                    d3.select(this).node().getBBox()).x; })
-                .attr("y", function(d) { return y(d.y) + textClalculate(x.bandwidth(), y.bandwidth(),
-                    d3.select(this).node().getBBox()).y; })
+            if (this.currentOptions.animationType == "corner"){
+                lincksRect
+                    .select("#textData")
+                    .attr("x", function(d) { return 0; })
+                    .attr("y", function(d) { return 0; });
+            } else {
+                lincksRect
+                    .select("#textData")
+                    .attr("x", function(d) { return x(d.x) + textCalculate(x.bandwidth(), y.bandwidth(),
+                        d3.select(this).node().getBBox()).x; })
+                    .attr("y", function(d) { return y(d.y) + textCalculate(x.bandwidth(), y.bandwidth(),
+                        d3.select(this).node().getBBox()).y; });
+            }
 
             rects
                 .exit()
                 .remove();
 
-            let dataTmp = new Array();
-            d3.select('#dataviz').selectAll('#rectGroup').select('rect')
-                .transition()
-                .duration(600)
-                .attr("width",  x.bandwidth() )
-                .attr("height", y.bandwidth() )
-                .style("fill", function(d) { dataTmp.push({x: d.x, y: d.y}); return color(d.state)} )
-                .attr("x", function(d) { return x(d.x) })
-                .attr("y", function(d) { return y(d.y) });
-
-
-            let lables = d3.select('#dataviz').selectAll('#textData')
-                .data(dataTmp);
-            // TODO try back animation
-            lables
-                .style("font-size", function(d) { return newSize + "px" });
-            lables
-                .transition()
-                .duration(600)
-                .attr("x", function(d) { return x(d.x) + textClalculate(x.bandwidth(), y.bandwidth(),
-                    d3.select(this).node().getBBox()).x; })
-                .attr("y", function(d) { return y(d.y) + textClalculate(x.bandwidth(), y.bandwidth(),
-                    d3.select(this).node().getBBox()).y; })
-                .attr("opacity", 1)
+            //Start Animation ---------------------------
+            this.animateObjects(x, y, color, newSize);
 
         },
 
