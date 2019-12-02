@@ -34,7 +34,7 @@ define([
 
         this.defaultOptions = {
             padding: 0.1,
-            textPosition: "r-c",
+            textPosition: "b-c",
             sorting: "state",
             sortingType: "front",
             orientation: "top-left-h",
@@ -246,22 +246,24 @@ define([
 
         }
 
-        this.calculateTextPos = function(xRect, yRect, textLength, textSize) {
+        this.calculateTextPos = function(xRect, yRect, textSize) {
             let x, y;
-            
-            console.log("length - " + textLength);
-            console.log("size - " + textSize);
-            // let currentRelativeRatio = textLength / textSize;
-            // let sizeFactor = 0;
-            // // textLength = textLength * sizeFactor;
-            // if (currentRelativeRatio !== this.relativeRatio){
-            //     //sizeFactor = te
-            //     console.log("baad - ", currentRelativeRatio + " - " + this.relativeRatio);
-            // }
             switch (this.currentOptions.textPosition) {
                 case "r-c":
-                    x = xRect - textLength / 2;
+                    x = xRect - textSize.width / 2;
                     y = yRect / 2;
+                    break;
+                case "l-c":
+                    x = textSize.width / 2;
+                    y = yRect / 2;
+                    break;
+                case "t-c":
+                    x = xRect / 2;
+                    y = textSize.height / 2;
+                    break;
+                case "b-c":
+                    x = xRect / 2;
+                    y = yRect - textSize.height / 2;
                     break;
                 default:
                     x = xRect / 2;
@@ -270,10 +272,6 @@ define([
             };
             return {x, y};
         }.bind(this);
-
-        // this.setRelativeRatio = function(ratio){
-        //     this.relativeRatio = ratio;
-        // }.bind(this);
     }
 
 
@@ -409,8 +407,6 @@ define([
                     self.text(text + '...');
                     textLength = self.node().getComputedTextLength();
                 }
-                //setRatio(textLength / newSize);
-                //console.log("relative - " + relativeRatio);
             }
 
             let x = d3.scaleBand()
@@ -469,8 +465,6 @@ define([
                             .attr("y", function(d) { return y(d.y) });
 
 
-            
-            //let newPos = this.calculateTextPos(x.bandwidth(), y.bandwidth());
             lincksRect
                 .append("text")
                 .attr("class", this.textStyles)
@@ -485,9 +479,9 @@ define([
             lincksRect
                 .select("#textData")
                 .attr("x", function(d) { return x(d.x) + textClalculate(x.bandwidth(), y.bandwidth(),
-                    d3.select(this).node().getComputedTextLength(), newSize).x; })
+                    d3.select(this).node().getBBox()).x; })
                 .attr("y", function(d) { return y(d.y) + textClalculate(x.bandwidth(), y.bandwidth(),
-                    d3.select(this).node().getComputedTextLength(), newSize).y; })
+                    d3.select(this).node().getBBox()).y; })
 
             rects
                 .exit()
@@ -506,19 +500,17 @@ define([
 
             let lables = d3.select('#dataviz').selectAll('#textData')
                 .data(dataTmp);
-
+            // TODO try back animation
             lables
-            .style("font-size", function(d) { return newSize + "px" });
-
+                .style("font-size", function(d) { return newSize + "px" });
             lables
                 .transition()
                 .duration(600)
                 .attr("x", function(d) { return x(d.x) + textClalculate(x.bandwidth(), y.bandwidth(),
-                    d3.select(this).node().getComputedTextLength(), newSize).x; })
+                    d3.select(this).node().getBBox()).x; })
                 .attr("y", function(d) { return y(d.y) + textClalculate(x.bandwidth(), y.bandwidth(),
-                    d3.select(this).node().getComputedTextLength(), newSize).y; })
+                    d3.select(this).node().getBBox()).y; })
                 .attr("opacity", 1)
-                //.style("font-size", function(d) { return newSize + "px" });
 
         },
 
