@@ -1,6 +1,6 @@
 {
     "text": {
-        "cls": " text-anchor: middle; font-size: 2em; font-family: 'Open Sans', sans-serif;  fill: black;     font-weight: 500;   position: relative;   "
+        "cls": " text-anchor: middle;  font-size: 2em;    font-family: 'Open Sans', sans-serif;  fill: blue;        font-weight: 500;    position: relative;   "
     },
 
     "rect": {

@@ -6,7 +6,7 @@ require.config({
     }
 });
 
-requirejs(['jquery', 'heatMap'],
+requirejs(['jquery', 'HeatMap'],
 function   ($, HeatMap) {
     $.getJSON('data/settings.json', function(settings){
         $.getJSON('data/settings2.json', function(settings2){
@@ -44,14 +44,14 @@ async function loop(HeatMap, $, settings) {
         updateMap(jsonData[i], map, $);
         i = (i + 1) % 5;
     }
-    map.setStyles(settings[1]);
+    // map.setStyles(settings[1]);
     for (let j = 0; j < 4; j++) {
         await sleep(2000)
         console.log("update with - " + i);
         updateMap(jsonData[i], map, $);
         i = (i + 1) % 5;
     }
-    map.setStyles(settings[2]);
+    // map.setStyles(settings[2]);
     //map.unInitCtrl(undefined);
     while(true) {
       await sleep(2000)

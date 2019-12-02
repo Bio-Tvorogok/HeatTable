@@ -40,7 +40,7 @@
       "value": 7,
       "target-path": "/kek/p2/db",
       "display-path": "base-path",
-      "id" : 34,
+      "id" : 24,
       "text" : "text",
       "linkto" : "https://blog.risingstack.com/d3-js-tutorial-bar-charts-with-javascript/"
    },
